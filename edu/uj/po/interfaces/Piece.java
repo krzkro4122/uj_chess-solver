@@ -1,5 +1,5 @@
 package edu.uj.po.interfaces;
 
-public abstract class Piece {
-
+public class Piece {
+    
 }
