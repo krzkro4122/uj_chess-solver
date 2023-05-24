@@ -8,7 +8,6 @@ import java.util.Optional;
 class ChessSolver implements Setup, Solver {
     private Board board;
     private PieceBuilder pieceBuilder;
-    private boolean isValid;
 	/**
 	 * Bierki podanego koloru zaczynają i dają mata (o ile jest to możliwe) w jednym
 	 * ruchu.
