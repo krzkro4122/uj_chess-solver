@@ -1,7 +1,13 @@
-package edu.uj.po.interfaces;
+package edu.uj.po.src;
 
 import java.util.List;
 import java.util.Optional;
+
+import edu.uj.po.interfaces.ChessPiece;
+import edu.uj.po.interfaces.Color;
+import edu.uj.po.interfaces.Move;
+import edu.uj.po.interfaces.Position;
+import edu.uj.po.interfaces.SearchHandler;
 
 public class Piece implements SearchHandler {
 

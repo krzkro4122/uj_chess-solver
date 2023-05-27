@@ -2,6 +2,9 @@ package edu.uj.po.interfaces;
 
 import java.util.Optional;
 
+import edu.uj.po.src.Board;
+import edu.uj.po.src.Piece.PieceBuilder;
+
 /**
  * Interfejs programu rozwiązującego zadania szachowe.
  */

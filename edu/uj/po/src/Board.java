@@ -1,7 +1,11 @@
-package edu.uj.po.interfaces;
+package edu.uj.po.src;
 
 import java.util.List;
 import java.util.Optional;
+
+import edu.uj.po.interfaces.Color;
+import edu.uj.po.interfaces.Move;
+import edu.uj.po.interfaces.Solver;
 
 public class Board implements Solver {
     private List<Piece> pieces;

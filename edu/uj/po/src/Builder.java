@@ -1,4 +1,8 @@
-package edu.uj.po.interfaces;
+package edu.uj.po.src;
+
+import edu.uj.po.interfaces.ChessPiece;
+import edu.uj.po.interfaces.Color;
+import edu.uj.po.interfaces.Position;
 
 public interface Builder {
     public void setColor(Color color);

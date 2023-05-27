@@ -1,4 +1,4 @@
-package edu.uj.po.interfaces;
+package edu.uj.po.src;
 
 import java.util.List;
 
