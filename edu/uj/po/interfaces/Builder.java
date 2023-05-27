@@ -5,5 +5,5 @@ public interface Builder {
     public void setType(ChessPiece type);
     public void setPosition(Position position);
     public void discoverPossibleMoves();
-    public void setMoveValidator(MoveValidator moveValidator);
+    public Piece build();
 }

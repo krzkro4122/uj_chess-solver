@@ -12,11 +12,15 @@ public class Board implements Solver {
     }
 
     public void snapshotBoard() {
-        memento = new BoardMemento(pieces);
+        this.memento = new BoardMemento(pieces);
     }
 
     public List<Piece> getPieces() {
         return pieces;
+    }
+
+    public void addChessPiece(Piece piece) {
+        pieces.add(piece);
     }
 
     @Override
