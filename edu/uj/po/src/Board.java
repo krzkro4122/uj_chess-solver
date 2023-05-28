@@ -29,13 +29,21 @@ public class Board implements Solver {
 
     @Override
     public Optional<Move> findMateInOneMove(Color color) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findMateInOneMove'");
+        Piece coloredRepresentant = pieces
+            .stream()
+            .filter(p -> p.getColor() == color)
+            .findFirst()
+            .get();
+        return coloredRepresentant.findMate();
     }
 
     @Override
     public Optional<Move> findStalemateInOneMove(Color color) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findStalemateInOneMove'");
+        Piece coloredRepresentant = pieces
+            .stream()
+            .filter(p -> p.getColor() == color)
+            .findFirst()
+            .get();
+        return coloredRepresentant.findStaleMate();
     }
 }

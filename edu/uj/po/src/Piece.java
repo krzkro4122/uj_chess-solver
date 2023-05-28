@@ -3,6 +3,7 @@ package edu.uj.po.src;
 import java.util.List;
 import java.util.Optional;
 
+import edu.uj.po.interfaces.Builder;
 import edu.uj.po.interfaces.ChessPiece;
 import edu.uj.po.interfaces.Color;
 import edu.uj.po.interfaces.Move;
@@ -15,7 +16,7 @@ public class Piece implements SearchHandler {
     private ChessPiece type;
     private Position position;
     private List<Move> possibleMoves;
-    private Piece nextPiece;
+    private Piece lastPiece;
 
     @Override
     public Optional<Move> findMate() {
@@ -33,18 +34,58 @@ public class Piece implements SearchHandler {
         return position;
     }
 
+    public Color getColor() {
+        return color;
+    }
+
+    public ChessPiece getType() {
+        return type;
+    }
+
     public void setPosition(Position position) {
         this.position = position;
     }
 
+    public List<Move> getPossibleMoves() {
+        return possibleMoves;
+    }
+
+    public void discoverPossibleMoves() {
+        switch (type) {
+            case BISHOP:    discoverBishopMoves(); break;
+            case KING:      discoverKingMoves(); break;
+            case KNIGHT:    discoverKnightMoves(); break;
+            case PAWN:      discoverPawnMoves(); break;
+            case QUEEN:     discoverQueenMoves(); break;
+            case ROOK:      discoverRookMoves(); break;
+            default:        throw new IllegalArgumentException("Unknown type of piece");
+        }
+    }
+
+    private void discoverQueenMoves() {
+    }
+
+    private void discoverPawnMoves() {
+    }
+
+    private void discoverKnightMoves() {
+    }
+
+    private void discoverKingMoves() {
+    }
+
+    private void discoverBishopMoves() {
+    }
+
+    private void discoverRookMoves() {
+    }
 
     public class PieceBuilder implements Builder {
 
         private Color color;
+        private Piece lastPiece;
         private ChessPiece type;
         private Position position;
-        private List<Move> possibleMoves;
-        private Piece lastPiece;
 
         @Override
         public void setColor(Color color) {
@@ -62,9 +103,8 @@ public class Piece implements SearchHandler {
         }
 
         @Override
-        public void discoverPossibleMoves() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'discoverPossibleMoves'");
+        public void setLastPiece(Piece piece) {
+            this.lastPiece = piece;
         }
 
         @Override
@@ -73,15 +113,7 @@ public class Piece implements SearchHandler {
             piece.color = color;
             piece.type = type;
             piece.position = position;
-            piece.possibleMoves = possibleMoves;
-
-            if (lastPiece != null) {
-                lastPiece.nextPiece = piece;
-                lastPiece = piece;
-            } else {
-                lastPiece = piece;
-            }
-
+            piece.lastPiece = lastPiece;
             return piece;
         }
     }
