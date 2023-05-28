@@ -16,7 +16,7 @@ public class Piece implements SearchHandler {
     private ChessPiece type;
     private Position position;
     private List<Move> possibleMoves;
-    private Piece lastPiece;
+    private Piece previousPiece;
 
     @Override
     public Optional<Move> findMate() {
@@ -91,9 +91,9 @@ public class Piece implements SearchHandler {
     public class PieceBuilder implements Builder {
 
         private Color color;
-        private Piece lastPiece;
         private ChessPiece type;
         private Position position;
+        private Piece previousPiece;
 
         @Override
         public void setColor(Color color) {
@@ -117,11 +117,11 @@ public class Piece implements SearchHandler {
             piece.type = type;
             piece.position = position;
 
-            if (lastPiece != null) {
-                piece.lastPiece = lastPiece;
+            if (previousPiece != null) {
+                piece.previousPiece = previousPiece;
             }
 
-            lastPiece = piece;
+            previousPiece = piece;
             return piece;
         }
     }

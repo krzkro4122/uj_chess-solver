@@ -22,8 +22,7 @@ class ChessSolver implements Setup, Solver {
 
     @Override
     public void reset() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'reset'");
+        board = new Board();
     }
 
     @Override

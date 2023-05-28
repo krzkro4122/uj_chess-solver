@@ -15,8 +15,8 @@ public class Board implements Solver {
         pieces = memento.getBoard();
     }
 
-    public void snapshotBoard() {
-        this.memento = new BoardMemento(pieces);
+    public void saveSnapshot() {
+        memento = new BoardMemento(pieces);
     }
 
     public List<Piece> getPieces() {
