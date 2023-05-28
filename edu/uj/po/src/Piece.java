@@ -7,7 +7,9 @@ import edu.uj.po.interfaces.Builder;
 import edu.uj.po.interfaces.ChessPiece;
 import edu.uj.po.interfaces.Color;
 import edu.uj.po.interfaces.Move;
+import edu.uj.po.interfaces.MoveStrategy;
 import edu.uj.po.interfaces.Position;
+import edu.uj.po.interfaces.Rank;
 import edu.uj.po.interfaces.SearchHandler;
 
 public class Piece implements SearchHandler {
@@ -16,6 +18,7 @@ public class Piece implements SearchHandler {
     private ChessPiece type;
     private Position position;
     private List<Move> possibleMoves;
+    private MoveStrategy moveStrategy;
     private Piece previousPiece;
 
     @Override
@@ -51,41 +54,7 @@ public class Piece implements SearchHandler {
     }
 
     public void discoverPossibleMoves() {
-        switch (type) {
-            case BISHOP:    discoverBishopMoves(); break;
-            case KING:      discoverKingMoves(); break;
-            case KNIGHT:    discoverKnightMoves(); break;
-            case PAWN:      discoverPawnMoves(); break;
-            case QUEEN:     discoverQueenMoves(); break;
-            case ROOK:      discoverRookMoves(); break;
-            default:        throw new IllegalArgumentException("Unknown type of piece");
-        }
-    }
-
-    private void discoverQueenMoves() {
-        discoverBishopMoves();
-        discoverRookMoves();
-    }
-
-    private void discoverPawnMoves() {
-        // TODO - HANDLE "en passant"
-
-    }
-
-    private void discoverKnightMoves() {
-
-    }
-
-    private void discoverKingMoves() {
-
-    }
-
-    private void discoverBishopMoves() {
-
-    }
-
-    private void discoverRookMoves() {
-
+        possibleMoves = moveStrategy.discoverAllMoves();
     }
 
     public class PieceBuilder implements Builder {
