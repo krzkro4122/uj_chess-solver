@@ -3,36 +3,21 @@ package edu.uj.po.interfaces;
 import java.util.Optional;
 
 import edu.uj.po.src.Board;
+import edu.uj.po.src.Piece;
 import edu.uj.po.src.Piece.PieceBuilder;
 
-/**
- * Interfejs programu rozwiązującego zadania szachowe.
- */
+
 class ChessSolver implements Setup, Solver {
+
     private Board board;
     private PieceBuilder pieceBuilder;
-	/**
-	 * Bierki podanego koloru zaczynają i dają mata (o ile jest to możliwe) w jednym
-	 * ruchu.
-	 *
-	 * @param color kolor strony wykonującej ruch
-	 * @return ruch (o ile istnieje) bierki kończący partię matem.
-	 */
+
 	public Optional<Move> findMateInOneMove(Color color) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'reset'");
+        return board.findMateInOneMove(color);
     }
 
-	/**
-	 * Bierki podanego koloru zaczynają i dają pata (o ile jest to możliwe) w jednym
-	 * ruchu.
-	 *
-	 * @param color kolor strony wykonującej ruch
-	 * @return ruch (o ile istnieje) bierki kończący partię patem.
-	 */
 	public Optional<Move> findStalemateInOneMove(Color color) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'reset'");
+        return board.findStalemateInOneMove(color);
     }
 
     @Override
@@ -43,7 +28,10 @@ class ChessSolver implements Setup, Solver {
 
     @Override
     public void addChessPiece(Position position, Color color, ChessPiece piece) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addChessPiece'");
+        pieceBuilder.setColor(color);
+        pieceBuilder.setPosition(position);
+        pieceBuilder.setType(piece);
+        Piece newPiece = pieceBuilder.build();
+        board.addChessPiece(newPiece);
     }
 }

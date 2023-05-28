@@ -6,6 +6,5 @@ public interface Builder {
     public void setColor(Color color);
     public void setType(ChessPiece type);
     public void setPosition(Position position);
-    public void setLastPiece(Piece piece);
     public Piece build();
 }

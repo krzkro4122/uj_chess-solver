@@ -63,21 +63,29 @@ public class Piece implements SearchHandler {
     }
 
     private void discoverQueenMoves() {
+        discoverBishopMoves();
+        discoverRookMoves();
     }
 
     private void discoverPawnMoves() {
+        // TODO - HANDLE "en passant"
+
     }
 
     private void discoverKnightMoves() {
+
     }
 
     private void discoverKingMoves() {
+
     }
 
     private void discoverBishopMoves() {
+
     }
 
     private void discoverRookMoves() {
+
     }
 
     public class PieceBuilder implements Builder {
@@ -103,17 +111,17 @@ public class Piece implements SearchHandler {
         }
 
         @Override
-        public void setLastPiece(Piece piece) {
-            this.lastPiece = piece;
-        }
-
-        @Override
         public Piece build() {
             Piece piece = new Piece();
             piece.color = color;
             piece.type = type;
             piece.position = position;
-            piece.lastPiece = lastPiece;
+
+            if (lastPiece != null) {
+                piece.lastPiece = lastPiece;
+            }
+
+            lastPiece = piece;
             return piece;
         }
     }
