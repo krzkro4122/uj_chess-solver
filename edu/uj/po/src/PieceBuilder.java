@@ -1,11 +1,11 @@
 package edu.uj.po.src;
 
-import edu.uj.po.interfaces.Builder;
 import edu.uj.po.interfaces.ChessPiece;
 import edu.uj.po.interfaces.Color;
-import edu.uj.po.interfaces.MoveStrategy;
 import edu.uj.po.interfaces.Position;
 import edu.uj.po.src.MoveStrategies.*;
+import edu.uj.po.src.interfaces.Builder;
+import edu.uj.po.src.interfaces.MoveStrategy;
 
 public class PieceBuilder implements Builder {
 

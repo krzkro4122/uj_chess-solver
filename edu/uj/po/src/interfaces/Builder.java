@@ -1,5 +1,8 @@
-package edu.uj.po.interfaces;
+package edu.uj.po.src.interfaces;
 
+import edu.uj.po.interfaces.ChessPiece;
+import edu.uj.po.interfaces.Color;
+import edu.uj.po.interfaces.Position;
 import edu.uj.po.src.Board;
 import edu.uj.po.src.Piece;
 

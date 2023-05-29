@@ -1,7 +1,8 @@
-package edu.uj.po.interfaces;
+package edu.uj.po.src.interfaces;
 
 import java.util.List;
 
+import edu.uj.po.interfaces.Move;
 import edu.uj.po.src.Board;
 import edu.uj.po.src.Piece;
 

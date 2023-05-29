@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Optional;
 
 import edu.uj.po.interfaces.Move;
-import edu.uj.po.interfaces.MoveStrategy;
 import edu.uj.po.interfaces.Position;
 import edu.uj.po.src.Board;
 import edu.uj.po.src.BoundsValidator;
 import edu.uj.po.src.KnightDirection;
 import edu.uj.po.src.Piece;
+import edu.uj.po.src.interfaces.MoveStrategy;
 
 public class KnightMove implements MoveStrategy {
 
