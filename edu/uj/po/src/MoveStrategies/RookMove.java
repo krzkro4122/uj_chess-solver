@@ -52,6 +52,7 @@ public class RookMove implements MoveStrategy {
                 }
             }
         }
+        return moves;
     }
 
     @Override
@@ -64,4 +65,5 @@ public class RookMove implements MoveStrategy {
         }
 
         return moves;
+    }
 }
