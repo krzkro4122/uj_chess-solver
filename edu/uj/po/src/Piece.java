@@ -55,7 +55,7 @@ public class Piece implements SearchHandler {
     }
 
     public void discoverPossibleMoves() {
-        possibleMoves = moveStrategy.discoverAllMoves(this, );
+        possibleMoves = moveStrategy.discoverPossibleMoves(this, _board);
     }
 
     public class PieceBuilder implements Builder {

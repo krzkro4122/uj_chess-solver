@@ -11,12 +11,12 @@ import edu.uj.po.src.Direction;
 import edu.uj.po.src.Board;
 import edu.uj.po.src.Piece;
 
-public class RookMove implements MoveStrategy {
+public class KingMove implements MoveStrategy {
 
     private Piece piece;
     private Position currentPosition;
 
-    RookMove(Piece piece) {
+    KingMove(Piece piece) {
         this.piece = piece;
         currentPosition = piece.getPosition();
     }
@@ -34,7 +34,7 @@ public class RookMove implements MoveStrategy {
 
     private List<Move> scanDirectionForMoves(Direction direction, Board board) {
         List<Move> moves = List.of();
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 1; i++) {
             Optional<Position> possibleDestination = createPosition(i, direction);
             if (possibleDestination.isPresent()) {
                 Position destination = possibleDestination.get();
@@ -55,7 +55,10 @@ public class RookMove implements MoveStrategy {
     @Override
     public List<Move> discoverPossibleMoves(Piece piece, Board board) {
         List<Move> moves = List.of();
-        List<Direction> rookDirections = List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
+        List<Direction> rookDirections = List.of(
+            Direction.NORTH_EAST,   Direction.SOUTH_EAST,   Direction.SOUTH_WEST,   Direction.NORTH_WEST,
+            Direction.NORTH,        Direction.EAST,         Direction.SOUTH,        Direction.WEST
+        );
 
         for (Direction direction : rookDirections) {
             moves.addAll(scanDirectionForMoves(direction, board));
