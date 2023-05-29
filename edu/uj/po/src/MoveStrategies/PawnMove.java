@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import edu.uj.po.interfaces.ChessPiece;
-import edu.uj.po.interfaces.File;
 import edu.uj.po.interfaces.Move;
 import edu.uj.po.interfaces.MoveStrategy;
 import edu.uj.po.interfaces.Position;

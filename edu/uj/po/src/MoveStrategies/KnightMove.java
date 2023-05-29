@@ -43,7 +43,7 @@ public class KnightMove implements MoveStrategy {
                 Optional<Piece> possiblePiece = board.checkPosition(destination);
                 if (possiblePiece.isEmpty()) {
                     moves.add(createMove(destination));
-                } else if (possiblePiece.get().getColor() != piece.getColor()) {
+                } else if (possiblePiece.get().getColor() != this.piece.getColor()) {
                     moves.add(createMove(destination));
                 }
             }
