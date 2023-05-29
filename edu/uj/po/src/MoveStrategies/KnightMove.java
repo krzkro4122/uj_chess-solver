@@ -1,5 +1,6 @@
 package edu.uj.po.src.MoveStrategies;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +17,7 @@ public class KnightMove implements MoveStrategy {
     private Piece piece;
     private Position currentPosition;
 
-    KnightMove(Piece piece) {
+    public KnightMove(Piece piece) {
         this.piece = piece;
         currentPosition = piece.getPosition();
     }
@@ -34,7 +35,7 @@ public class KnightMove implements MoveStrategy {
 
     @Override
     public List<Move> discoverPossibleMoves(Piece piece, Board board) {
-        List<Move> moves = List.of();
+        List<Move> moves = new ArrayList<Move>();
 
         for (KnightDirection direction : KnightDirection.values()) {
             Optional<Position> possibleDestination = createPosition(direction);

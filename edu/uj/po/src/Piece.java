@@ -9,18 +9,17 @@ import edu.uj.po.interfaces.Color;
 import edu.uj.po.interfaces.Move;
 import edu.uj.po.interfaces.MoveStrategy;
 import edu.uj.po.interfaces.Position;
-import edu.uj.po.interfaces.Rank;
 import edu.uj.po.interfaces.SearchHandler;
 
 public class Piece implements SearchHandler {
 
-    private Color color;
-    private ChessPiece type;
-    private Position position;
+    Color color;
+    Board _board;
+    ChessPiece type;
+    Position position;
+    Piece previousPiece;
+    MoveStrategy moveStrategy;
     private List<Move> possibleMoves;
-    private MoveStrategy moveStrategy;
-    private Board _board;
-    private Piece previousPiece;
 
     @Override
     public Optional<Move> findMate() {
@@ -56,44 +55,5 @@ public class Piece implements SearchHandler {
 
     public void discoverPossibleMoves() {
         possibleMoves = moveStrategy.discoverPossibleMoves(this, _board);
-    }
-
-    public class PieceBuilder implements Builder {
-
-        private Color color;
-        private ChessPiece type;
-        private Position position;
-        private Piece previousPiece;
-
-        @Override
-        public void setColor(Color color) {
-            this.color = color;
-        }
-
-        @Override
-        public void setType(ChessPiece type) {
-            this.type = type;
-        }
-
-        @Override
-        public void setPosition(Position position) {
-            this.position = position;
-        }
-
-        @Override
-        public Piece build(Board board) {
-            Piece piece = new Piece();
-            piece.color = color;
-            piece.type = type;
-            piece.position = position;
-            piece._board = board;
-
-            if (previousPiece != null) {
-                piece.previousPiece = previousPiece;
-            }
-
-            previousPiece = piece;
-            return piece;
-        }
     }
 }

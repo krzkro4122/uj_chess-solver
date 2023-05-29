@@ -1,6 +1,7 @@
 package edu.uj.po.src.MoveStrategies;
 
 import java.util.Optional;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.uj.po.interfaces.MoveStrategy;
@@ -16,7 +17,7 @@ public class QueenMove implements MoveStrategy {
     private Piece piece;
     private Position currentPosition;
 
-    QueenMove(Piece piece) {
+    public QueenMove(Piece piece) {
         this.piece = piece;
         currentPosition = piece.getPosition();
     }
@@ -33,8 +34,8 @@ public class QueenMove implements MoveStrategy {
     }
 
     private List<Move> scanDirectionForMoves(Direction direction, Board board) {
-        List<Move> moves = List.of();
-        for (int i = 0; i < 8; i++) {
+        List<Move> moves = new ArrayList<Move>();
+        for (int i = 1; i < 8; i++) {
             Optional<Position> possibleDestination = createPosition(i, direction);
             if (possibleDestination.isPresent()) {
                 Position destination = possibleDestination.get();
@@ -54,7 +55,7 @@ public class QueenMove implements MoveStrategy {
 
     @Override
     public List<Move> discoverPossibleMoves(Piece piece, Board board) {
-        List<Move> moves = List.of();
+        List<Move> moves = new ArrayList<Move>();
         List<Direction> rookDirections = List.of(
             Direction.NORTH_EAST,   Direction.SOUTH_EAST,   Direction.SOUTH_WEST,   Direction.NORTH_WEST,
             Direction.NORTH,        Direction.EAST,         Direction.SOUTH,        Direction.WEST

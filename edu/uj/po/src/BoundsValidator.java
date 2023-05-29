@@ -17,7 +17,7 @@ public class BoundsValidator {
         int destinationRank = startRank.ordinal() + amount * direction.getRankCoef();
         if (    destinationFile >= files.length || destinationFile < 0
             ||  destinationRank >= ranks.length || destinationRank < 0)
-            return null;
+            return Optional.empty();
         return Optional.of(new Position(
             files[destinationFile],
             ranks[destinationRank]
@@ -34,7 +34,7 @@ public class BoundsValidator {
         int destinationRank = startRank.ordinal() + direction.getRankCoef();
         if (    destinationFile >= files.length || destinationFile < 0
             ||  destinationRank >= ranks.length || destinationRank < 0)
-            return null;
+            return Optional.empty();
         return Optional.of(new Position(
             files[destinationFile],
             ranks[destinationRank]

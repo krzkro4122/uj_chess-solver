@@ -1,5 +1,6 @@
 package edu.uj.po.src.MoveStrategies;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,7 @@ public class PawnMove implements MoveStrategy {
     private Piece piece;
     private Position currentPosition;
 
-    PawnMove(Piece piece) {
+    public PawnMove(Piece piece) {
         this.piece = piece;
         currentPosition = piece.getPosition();
     }
@@ -45,7 +46,7 @@ public class PawnMove implements MoveStrategy {
     }
 
     private List<Move> leftAttack(Board board) {
-        List<Move> moves = List.of();
+        List<Move> moves = new ArrayList<Move>();
 
         Optional<Position> leftAttackPossiblePosition = createPosition(1, Direction.NORTH_WEST);
 
@@ -64,7 +65,7 @@ public class PawnMove implements MoveStrategy {
     }
 
     private List<Move> rightAttack(Board board) {
-        List<Move> moves = List.of();
+        List<Move> moves = new ArrayList<Move>();
 
         Optional<Position> rightAttackPossiblePosition = createPosition(1, Direction.NORTH_EAST);
 
@@ -84,7 +85,7 @@ public class PawnMove implements MoveStrategy {
 
     @Override
     public List<Move> discoverPossibleMoves(Piece piece, Board board) {
-        List<Move> moves = List.of();
+        List<Move> moves = new ArrayList<Move>();
 
         // Attacks
         moves.addAll(leftAttack(board));
