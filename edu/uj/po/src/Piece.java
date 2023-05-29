@@ -19,6 +19,7 @@ public class Piece implements SearchHandler {
     private Position position;
     private List<Move> possibleMoves;
     private MoveStrategy moveStrategy;
+    private Board _board;
     private Piece previousPiece;
 
     @Override
@@ -54,7 +55,7 @@ public class Piece implements SearchHandler {
     }
 
     public void discoverPossibleMoves() {
-        possibleMoves = moveStrategy.discoverAllMoves();
+        possibleMoves = moveStrategy.discoverAllMoves(this, );
     }
 
     public class PieceBuilder implements Builder {
@@ -80,11 +81,12 @@ public class Piece implements SearchHandler {
         }
 
         @Override
-        public Piece build() {
+        public Piece build(Board board) {
             Piece piece = new Piece();
             piece.color = color;
             piece.type = type;
             piece.position = position;
+            piece._board = board;
 
             if (previousPiece != null) {
                 piece.previousPiece = previousPiece;

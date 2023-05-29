@@ -10,6 +10,7 @@ import edu.uj.po.interfaces.MoveStrategy;
 import edu.uj.po.interfaces.Position;
 import edu.uj.po.interfaces.Rank;
 import edu.uj.po.src.Board;
+import edu.uj.po.src.BoundsValidator;
 import edu.uj.po.src.Direction;
 import edu.uj.po.src.Piece;
 
@@ -33,34 +34,26 @@ public class PawnMove implements MoveStrategy {
         return true;
     }
 
-    private Position createPosition(int amount, Direction direction) {
-        assert amount > 0 && amount <= 1;
-        File startFile = currentPosition.file();
-        Rank startRank = currentPosition.rank();
-        File[] files = File.values();
-        Rank[] ranks = Rank.values();
-        return new Position(
-            files[(startFile.ordinal() + amount * direction.getFileCoef()) % files.length],
-            ranks[(startRank.ordinal() + amount * direction.getRankCoef()) % ranks.length]
-            );
+    private Optional<Position> createPosition(int amount, Direction direction) {
+        return BoundsValidator.validatePositionBounds(currentPosition, direction, amount);
     }
 
-    private Move createMove(int amount, Direction direction) {
-        assert amount > 0 && amount <= 1;
-        Position destination = createPosition(amount, direction);
+    private Move createMove(Position destination) {
         return new Move(
             currentPosition,
             destination
-            );
+        );
     }
 
-    @Override
-    public List<Move> discoverAllMoves(Piece piece, Board board) {
+    private List<Move> leftAttack(Board board) {
         List<Move> moves = List.of();
 
-        // Attacks
-        {
-            Position leftAttackPosition = createPosition(1, Direction.NORTH_WEST);
+        Optional<Position> leftAttackPossiblePosition = createPosition(1, Direction.NORTH_WEST);
+
+            if (leftAttackPossiblePosition.isEmpty())
+                return null;
+
+            Position leftAttackPosition = leftAttackPossiblePosition.get();
             Optional<Piece> potentialPiece = board.checkPosition(leftAttackPosition);
             if (potentialPiece.isPresent()) {
                 Piece detectedPiece = potentialPiece.get();
@@ -68,10 +61,18 @@ public class PawnMove implements MoveStrategy {
                     moves.add(new Move(currentPosition, leftAttackPosition));
                 }
             }
-        }
+        return moves;
+    }
 
-        {
-            Position rightAttackPosition = createPosition(1, Direction.NORTH_EAST);
+    private List<Move> rightAttack(Board board) {
+        List<Move> moves = List.of();
+
+        Optional<Position> rightAttackPossiblePosition = createPosition(1, Direction.NORTH_EAST);
+
+            if (rightAttackPossiblePosition.isEmpty())
+                return null;
+
+            Position rightAttackPosition = rightAttackPossiblePosition.get();
             Optional<Piece> potentialPiece = board.checkPosition(rightAttackPosition);
             if (potentialPiece.isPresent()) {
                 Piece detectedPiece = potentialPiece.get();
@@ -79,17 +80,32 @@ public class PawnMove implements MoveStrategy {
                     moves.add(new Move(currentPosition, rightAttackPosition));
                 }
             }
-        }
+        return moves;
+    }
+
+    @Override
+    public List<Move> discoverPossibleMoves(Piece piece, Board board) {
+        List<Move> moves = List.of();
+
+        // Attacks
+        moves.addAll(leftAttack(board));
+        moves.addAll(rightAttack(board));
 
         // Simple moves
-        Position positionInFront = createPosition(1, Direction.NORTH);
+        Optional<Position> possiblePositionInFront = createPosition(1, Direction.NORTH);
+        if (possiblePositionInFront.isEmpty())
+            return moves;
+        Position positionInFront = possiblePositionInFront.get();
         Optional<Piece> potentialPiece = board.checkPosition(positionInFront);
         if (potentialPiece.isEmpty()) {
-            moves.add(createMove(1, Direction.NORTH));
-            positionInFront = createPosition(2, Direction.NORTH);
+            moves.add(createMove(positionInFront));
+            possiblePositionInFront = createPosition(2, Direction.NORTH);
+            if (possiblePositionInFront.isEmpty())
+                return moves;
+            positionInFront = possiblePositionInFront.get();
             potentialPiece = board.checkPosition(positionInFront);
             if (!hasAlreadyMoved() && potentialPiece.isEmpty()) {
-                moves.add(createMove(2, Direction.NORTH));
+                moves.add(createMove(positionInFront));
             }
         }
 
