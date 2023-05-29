@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import edu.uj.po.interfaces.Color;
 import edu.uj.po.interfaces.Move;
+import edu.uj.po.interfaces.Position;
 import edu.uj.po.interfaces.Solver;
 
 public class Board implements Solver {
@@ -25,6 +26,13 @@ public class Board implements Solver {
 
     public void addChessPiece(Piece piece) {
         pieces.add(piece);
+    }
+
+    public Optional<Piece> checkPosition(Position position) {
+        return pieces
+            .stream()
+            .filter(p -> p.getPosition().equals(position))
+            .findFirst();
     }
 
     @Override
