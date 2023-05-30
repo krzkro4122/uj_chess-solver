@@ -1,9 +1,6 @@
-package edu.uj.po.src.Tests;
-
 import java.util.List;
 
 import edu.uj.po.interfaces.ChessPiece;
-import edu.uj.po.interfaces.ChessSolver;
 import edu.uj.po.interfaces.Color;
 import edu.uj.po.interfaces.File;
 import edu.uj.po.interfaces.Move;

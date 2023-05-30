@@ -1,8 +1,12 @@
-package edu.uj.po.interfaces;
-
 import java.util.List;
 import java.util.Optional;
 
+import edu.uj.po.interfaces.ChessPiece;
+import edu.uj.po.interfaces.Color;
+import edu.uj.po.interfaces.Move;
+import edu.uj.po.interfaces.Position;
+import edu.uj.po.interfaces.Setup;
+import edu.uj.po.interfaces.Solver;
 import edu.uj.po.src.Board;
 import edu.uj.po.src.Piece;
 import edu.uj.po.src.PieceBuilder;

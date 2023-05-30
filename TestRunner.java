@@ -1,5 +1,3 @@
-package edu.uj.po.src.Tests;
-
 public class TestRunner {
 
     public void run() {
