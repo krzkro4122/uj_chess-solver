@@ -35,7 +35,7 @@ public class KingMove implements MoveStrategy {
 
     private List<Move> scanDirectionForMoves(Direction direction, Board board) {
         List<Move> moves = new ArrayList<Move>();
-        for (int i = 0; i < 1; i++) {
+        for (int i = 1; i < 2; i++) {
             Optional<Position> possibleDestination = createPosition(i, direction);
             if (possibleDestination.isPresent()) {
                 Position destination = possibleDestination.get();
