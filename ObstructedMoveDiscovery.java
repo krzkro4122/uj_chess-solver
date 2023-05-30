@@ -19,7 +19,7 @@ public class ObstructedMoveDiscovery {
         chessSolver.addChessPiece(new Position(File.g, Rank.FIFTH), Color.WHITE, ChessPiece.PAWN);
         // Control group
         chessSolver.addChessPiece(new Position(File.h, Rank.FIRST), Color.WHITE, ChessPiece.PAWN);
-        List<Move> moveList = chessSolver.returnify();
+        List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 5) {
             return true;
@@ -36,7 +36,7 @@ public class ObstructedMoveDiscovery {
         chessSolver.addChessPiece(new Position(File.c, Rank.FIFTH), Color.WHITE, ChessPiece.PAWN);
         // Control group
         chessSolver.addChessPiece(new Position(File.h, Rank.FIRST), Color.WHITE, ChessPiece.PAWN);
-        List<Move> moveList = chessSolver.returnify();
+        List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 9) {
             return true;
@@ -53,7 +53,7 @@ public class ObstructedMoveDiscovery {
         chessSolver.addChessPiece(new Position(File.h, Rank.FIRST), Color.WHITE, ChessPiece.PAWN);
         // Control group
         chessSolver.addChessPiece(new Position(File.h, Rank.FIFTH), Color.WHITE, ChessPiece.PAWN);
-        List<Move> moveList = chessSolver.returnify();
+        List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 9) {
             return true;
@@ -75,7 +75,7 @@ public class ObstructedMoveDiscovery {
         chessSolver.addChessPiece(new Position(File.d, Rank.FIRST), Color.WHITE, ChessPiece.PAWN); // 2
         // Control group
         chessSolver.addChessPiece(new Position(File.h, Rank.FIFTH), Color.WHITE, ChessPiece.PAWN);
-        List<Move> moveList = chessSolver.returnify();
+        List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 14) {
             return true;
@@ -93,7 +93,7 @@ public class ObstructedMoveDiscovery {
         chessSolver.addChessPiece(new Position(File.e, Rank.SECOND), Color.WHITE, ChessPiece.PAWN);
         // Control group
         chessSolver.addChessPiece(new Position(File.h, Rank.FIFTH), Color.WHITE, ChessPiece.PAWN);
-        List<Move> moveList = chessSolver.returnify();
+        List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 5) {
             return true;
@@ -108,7 +108,7 @@ public class ObstructedMoveDiscovery {
         chessSolver.addChessPiece(new Position(File.e, Rank.FOURTH), Color.WHITE, ChessPiece.PAWN);
         // Control group
         chessSolver.addChessPiece(new Position(File.h, Rank.FIFTH), Color.WHITE, ChessPiece.PAWN);
-        List<Move> moveList = chessSolver.returnify();
+        List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 1) {
             return true;
@@ -125,7 +125,7 @@ public class ObstructedMoveDiscovery {
         chessSolver.addChessPiece(new Position(File.c, Rank.SEVENTH), Color.WHITE, ChessPiece.PAWN);
         // Control group
         chessSolver.addChessPiece(new Position(File.h, Rank.FIFTH), Color.WHITE, ChessPiece.PAWN);
-        List<Move> moveList = chessSolver.returnify();
+        List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 1) {
             return true;

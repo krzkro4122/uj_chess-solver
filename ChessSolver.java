@@ -44,8 +44,7 @@ public class ChessSolver implements Setup, Solver {
         board.addChessPiece(newPiece);
     }
 
-    // TODO - delete -> this is only for testing
-    public List<Move> returnify() {
+    public List<Move> testMoveGeneration() {
         Piece firstPiece = board.getPieces().get(0);
         firstPiece.discoverPossibleMoves();
         return firstPiece.getPossibleMoves();
