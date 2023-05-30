@@ -10,7 +10,7 @@ import edu.uj.po.interfaces.Move;
 import edu.uj.po.interfaces.Position;
 import edu.uj.po.interfaces.Rank;
 
-public class MoveDiscovery {
+public class SimpleMoveDiscovery {
 
     public static boolean testKingDiscovery() {
         ChessSolver chessSolver = new ChessSolver();

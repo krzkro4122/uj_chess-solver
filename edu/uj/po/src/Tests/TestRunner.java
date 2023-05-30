@@ -7,13 +7,13 @@ public class TestRunner {
     public void run() {
         System.out.println("Starting tests...");
         System.out.println("Testing move discovery...");
-        assertify(MoveDiscovery.testKingDiscovery(), "King");
-        assertify(MoveDiscovery.testRookDiscovery(), "Rook");
-        assertify(MoveDiscovery.testBishopDiscovery(), "Bishop");
-        assertify(MoveDiscovery.testQueenDiscovery(), "Queen");
-        assertify(MoveDiscovery.testKnightDiscovery(), "Knight");
-        assertify(MoveDiscovery.testPawnDiscoverySimple(), "Pawn (simple)");
-        assertify(MoveDiscovery.testPawnDiscoveryAttack(), "Pawn (attack)");
+        assertify(SimpleMoveDiscovery.testKingDiscovery(), "King");
+        assertify(SimpleMoveDiscovery.testRookDiscovery(), "Rook");
+        assertify(SimpleMoveDiscovery.testBishopDiscovery(), "Bishop");
+        assertify(SimpleMoveDiscovery.testQueenDiscovery(), "Queen");
+        assertify(SimpleMoveDiscovery.testKnightDiscovery(), "Knight");
+        assertify(SimpleMoveDiscovery.testPawnDiscoverySimple(), "Pawn (simple)");
+        assertify(SimpleMoveDiscovery.testPawnDiscoveryAttack(), "Pawn (attack)");
         System.out.println("Tests finished");
     }
 
