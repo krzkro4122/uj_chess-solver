@@ -7,7 +7,7 @@ import edu.uj.po.interfaces.Move;
 import edu.uj.po.interfaces.Position;
 import edu.uj.po.interfaces.Rank;
 
-public class ObstructedMoveDiscovery {
+public class TestObstructedDiscovery {
 
     public static boolean testKingDiscovery() {
         ChessSolver chessSolver = new ChessSolver();

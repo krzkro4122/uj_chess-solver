@@ -7,7 +7,7 @@ import edu.uj.po.interfaces.ChessPiece;
 import edu.uj.po.interfaces.Color;
 import edu.uj.po.interfaces.Move;
 import edu.uj.po.interfaces.Position;
-import edu.uj.po.src.interfaces.Builder;
+import edu.uj.po.interfaces.Rank;
 import edu.uj.po.src.interfaces.MoveStrategy;
 import edu.uj.po.src.interfaces.SearchHandler;
 
@@ -23,14 +23,65 @@ public class Piece implements SearchHandler {
 
     @Override
     public Optional<Move> findMate() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findMate'");
+        BoardMemento backup = _board.saveSnapshot();
+        discoverPossibleMoves();
+        for (Move move : getPossibleMoves()) {
+            _board.loadSnapshot(backup);
+            this.setPosition(move.finalPosition());
+
+            List<Piece> enemies =_board.getColoredPieces(getOppositeColor());
+            for (Piece enemy : enemies) {
+                enemy.discoverPossibleMoves();
+
+                for (Move enemyMove : enemy.getPossibleMoves()) {
+                    enemy.setPosition(enemyMove.finalPosition());
+
+                    for (Piece ally : _board.getColoredPieces(color)) {
+                        ally.discoverPossibleMoves();
+
+                        for (Move allyMove : ally.getPossibleMoves()) {
+                            Piece enemyKing = _board.getKing(getOppositeColor());
+
+                            if (allyMove.finalPosition().equals(enemyKing.getPosition())) {
+                                return Optional.of(move);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        _board.loadSnapshot(backup);
+
+        // Resp. chain
+        if (this.previousPiece != null) {
+            return this.previousPiece.findMate();
+        } else return Optional.empty();
     }
 
     @Override
     public Optional<Move> findStaleMate() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findStaleMate'");
+        BoardMemento backup = _board.saveSnapshot();
+        discoverPossibleMoves();
+        for (Move move : getPossibleMoves()) {
+            _board.loadSnapshot(backup);
+            this.setPosition(move.finalPosition());
+
+            List<Piece> enemies =_board.getColoredPieces(getOppositeColor());
+            for (Piece enemy : enemies) {
+
+                enemy.discoverPossibleMoves();
+                List<Move> enemyMoves = enemy.getPossibleMoves();
+                if (enemyMoves.isEmpty()) {
+                    return Optional.of(move);
+                }
+            }
+        }
+        _board.loadSnapshot(backup);
+
+        // Resp. chain
+        if (this.previousPiece != null) {
+            return this.previousPiece.findMate();
+        } else return Optional.empty();
     }
 
     public Position getPosition() {
@@ -41,12 +92,24 @@ public class Piece implements SearchHandler {
         return color;
     }
 
+    public Color getOppositeColor() {
+        return color == Color.WHITE ? Color.BLACK : Color.WHITE;
+    }
+
     public ChessPiece getType() {
         return type;
     }
 
     public void setPosition(Position position) {
         this.position = position;
+
+        // Promotion
+        if (type == ChessPiece.PAWN) {
+            boolean whitePromotable = color == Color.WHITE && position.rank() == Rank.EIGHTH;
+            boolean blackPromotable = color == Color.BLACK && position.rank() == Rank.FIRST;
+            boolean promotable = whitePromotable || blackPromotable;
+            if (promotable) { this.type = ChessPiece.QUEEN; }
+        }
     }
 
     public List<Move> getPossibleMoves() {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import edu.uj.po.interfaces.ChessPiece;
 import edu.uj.po.interfaces.Color;
 import edu.uj.po.interfaces.Move;
 import edu.uj.po.interfaces.Position;
@@ -22,12 +23,20 @@ public class Board implements Solver {
         pieces = memento.getBoard();
     }
 
-    public void saveSnapshot() {
+    public BoardMemento saveSnapshot() {
         memento = new BoardMemento(pieces);
+        return memento;
     }
 
     public List<Piece> getPieces() {
         return pieces;
+    }
+
+    public List<Piece> getColoredPieces(Color color) {
+        return pieces
+            .stream()
+            .filter(p -> p.getColor() == color)
+            .toList();
     }
 
     public void addChessPiece(Piece piece) {
@@ -39,6 +48,14 @@ public class Board implements Solver {
             .stream()
             .filter(p -> p.getPosition().equals(position))
             .findFirst();
+    }
+
+    public Piece getKing(Color color) {
+        return pieces
+            .stream()
+            .filter(piece -> piece.getColor() == color && piece.getType().equals(ChessPiece.KING))
+            .findFirst()
+            .get();
     }
 
     @Override
