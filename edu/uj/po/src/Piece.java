@@ -23,16 +23,15 @@ public class Piece implements SearchHandler {
 
     @Override
     public Optional<Move> findMate() {
-        BoardMemento backup = _board.saveSnapshot();
+        Position initialPosition = getPosition();
         discoverPossibleMoves();
         for (Move move : getPossibleMoves()) {
-            _board.loadSnapshot(backup);
-            this.setPosition(move.finalPosition());
+            setPosition(move.finalPosition());
+            List<Piece> enemies = _board.getColoredPieces(getOppositeColor());
 
-            List<Piece> enemies =_board.getColoredPieces(getOppositeColor());
             for (Piece enemy : enemies) {
                 enemy.discoverPossibleMoves();
-
+                Position enemeyInitialPosition = enemy.getPosition();
                 for (Move enemyMove : enemy.getPossibleMoves()) {
                     enemy.setPosition(enemyMove.finalPosition());
 
@@ -43,14 +42,18 @@ public class Piece implements SearchHandler {
                             Piece enemyKing = _board.getKing(getOppositeColor());
 
                             if (allyMove.finalPosition().equals(enemyKing.getPosition())) {
+                                setPosition(initialPosition);
+                                enemy.setPosition(enemyMove.finalPosition());
                                 return Optional.of(move);
                             }
                         }
                     }
+                    enemy.setPosition(enemeyInitialPosition);
                 }
             }
+            setPosition(initialPosition);
         }
-        _board.loadSnapshot(backup);
+        setPosition(initialPosition);
 
         // Resp. chain
         if (this.previousPiece != null) {
@@ -60,23 +63,24 @@ public class Piece implements SearchHandler {
 
     @Override
     public Optional<Move> findStaleMate() {
-        BoardMemento backup = _board.saveSnapshot();
+        Position initialPosition = getPosition();
         discoverPossibleMoves();
         for (Move move : getPossibleMoves()) {
-            _board.loadSnapshot(backup);
-            this.setPosition(move.finalPosition());
-
+            setPosition(move.finalPosition());
             List<Piece> enemies =_board.getColoredPieces(getOppositeColor());
-            for (Piece enemy : enemies) {
 
+            for (Piece enemy : enemies) {
                 enemy.discoverPossibleMoves();
                 List<Move> enemyMoves = enemy.getPossibleMoves();
+
                 if (enemyMoves.isEmpty()) {
+                    setPosition(initialPosition);
                     return Optional.of(move);
                 }
             }
+            setPosition(initialPosition);
         }
-        _board.loadSnapshot(backup);
+        setPosition(initialPosition);
 
         // Resp. chain
         if (this.previousPiece != null) {
@@ -100,6 +104,10 @@ public class Piece implements SearchHandler {
         return type;
     }
 
+    public MoveStrategy getMoveStrategy() {
+        return moveStrategy;
+    }
+
     public void setPosition(Position position) {
         this.position = position;
 
@@ -113,10 +121,46 @@ public class Piece implements SearchHandler {
     }
 
     public List<Move> getPossibleMoves() {
+        if (possibleMoves == null) {
+            possibleMoves = moveStrategy.discoverPossibleMoves(this, _board);
+        }
         return possibleMoves;
+    }
+
+    public boolean checkForCheck(Color color, List<Move> allyMoves) {
+        Piece king = _board.getKing(color);
+        List<Piece> enemyPieces = _board.getColoredPieces(king.getOppositeColor());
+        for (Piece enemyPiece : enemyPieces) {
+
+            List<Move> potentialEnemyMoves = enemyPiece.getMoveStrategy().discoverPossibleMoves(enemyPiece, _board);
+            for (Move potentialEnemyMove : potentialEnemyMoves) {
+                for (Move allyMove : allyMoves) {
+                    if (potentialEnemyMove.finalPosition() == allyMove.finalPosition()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public List<Move> pruneSuicidalMoves(Piece piece, Board board, List<Move> moves) {
+        Position initialPosition = piece.getPosition();
+
+        for (Move move : moves) {
+            piece.setPosition(move.finalPosition());
+
+            boolean kingInCheck = checkForCheck(piece.getColor(), moves);
+            if (kingInCheck) moves.remove(move);
+        }
+
+        piece.setPosition(initialPosition);
+        return moves;
     }
 
     public void discoverPossibleMoves() {
         possibleMoves = moveStrategy.discoverPossibleMoves(this, _board);
+        possibleMoves = pruneSuicidalMoves(this, _board, possibleMoves);
     }
 }
