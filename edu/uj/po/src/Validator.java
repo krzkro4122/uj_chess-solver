@@ -1,12 +1,15 @@
 package edu.uj.po.src;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import edu.uj.po.interfaces.File;
+import edu.uj.po.interfaces.Move;
 import edu.uj.po.interfaces.Position;
 import edu.uj.po.interfaces.Rank;
 
-public class BoundsValidator {
+public class Validator {
     public static Optional<Position> validatePositionBounds(Position currentPosition, Direction direction, int amount) {
         File startFile = currentPosition.file();
         Rank startRank = currentPosition.rank();
@@ -40,4 +43,19 @@ public class BoundsValidator {
             ranks[destinationRank]
         ));
     }
+
+    public static List<Move> pruneSuicidalMoves(Piece piece, List<Move> moves) {
+        Position initialPosition = piece.getPosition();
+        List<Move> prunedMoves =  new ArrayList<Move>(moves);
+
+        for (Move move : moves) {
+            Optional<Piece> possibleEnemyVictim = piece.setPosition(move.finalPosition());
+            boolean kingInCheck = piece.isKingInCheck(piece.color);
+            if (kingInCheck) { prunedMoves.remove(move); }
+            piece.revertPosition(initialPosition, possibleEnemyVictim);
+        }
+
+        return prunedMoves;
+    }
+
 }

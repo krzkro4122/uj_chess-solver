@@ -6,7 +6,7 @@ import java.util.List;
 
 import edu.uj.po.interfaces.Position;
 import edu.uj.po.interfaces.Move;
-import edu.uj.po.src.BoundsValidator;
+import edu.uj.po.src.Validator;
 import edu.uj.po.src.Direction;
 import edu.uj.po.src.Piece;
 import edu.uj.po.src.interfaces.MoveStrategy;
@@ -20,7 +20,7 @@ public class KingMove implements MoveStrategy {
     }
 
     private Optional<Position> createPosition(int amount, Direction direction) {
-        return BoundsValidator.validatePositionBounds(piece.getPosition(), direction, amount);
+        return Validator.validatePositionBounds(piece.getPosition(), direction, amount);
     }
 
     private Move createMove(Position destination) {
@@ -32,20 +32,15 @@ public class KingMove implements MoveStrategy {
 
     private List<Move> scanDirectionForMoves(Direction direction) {
         List<Move> moves = new ArrayList<Move>();
-        for (int i = 1; i < 2; i++) {
-            Optional<Position> possibleDestination = createPosition(i, direction);
-            if (possibleDestination.isPresent()) {
-                Position destination = possibleDestination.get();
-                Optional<Piece> possiblePiece = piece.checkWhoIsAt(possibleDestination.get());
-                if (possiblePiece.isEmpty()) {
-                    moves.add(createMove(destination));
-                } else if (possiblePiece.get().getColor() != piece.getColor()) {
-                    moves.add(createMove(destination));
-                    break;
-                } else {
-                    break;
-                }
-            } else break;
+        Optional<Position> possibleDestination = createPosition(1, direction);
+        if (possibleDestination.isPresent()) {
+            Position destination = possibleDestination.get();
+            Optional<Piece> possiblePiece = piece.checkWhoIsAt(possibleDestination.get());
+            if (possiblePiece.isEmpty()) {
+                moves.add(createMove(destination));
+            } else if (possiblePiece.get().getColor() != piece.getColor()) {
+                moves.add(createMove(destination));
+            }
         }
         return moves;
     }

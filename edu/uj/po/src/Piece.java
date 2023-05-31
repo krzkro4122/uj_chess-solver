@@ -67,10 +67,8 @@ public class Piece implements SearchHandler {
             List<Piece> enemies = getEnemies();
             for (Piece enemy : enemies) {
                 if (enemy.getPossibleMoves().isEmpty()) {
-                    if (!isKingInCheck(getOppositeColor())) {
-                        revertPosition(initialPosition, possibleEnemyVictim);
-                        return Optional.of(move);
-                    }
+                    revertPosition(initialPosition, possibleEnemyVictim);
+                    return Optional.of(move);
                 }
             }
             revertPosition(initialPosition, possibleEnemyVictim);
@@ -89,7 +87,7 @@ public class Piece implements SearchHandler {
     public Optional<Piece> setPosition(Position position) {
         this.position = position;
 
-        // Attack
+        // Capture
         Optional<Piece> possiblePiece = checkWhoIsAt(position);
         if (possiblePiece.isPresent()) {
             Piece attackedPiece = possiblePiece.get();
@@ -120,10 +118,10 @@ public class Piece implements SearchHandler {
         if (possibleVictim.isPresent()) {
             Piece victim = possibleVictim.get();
             victim.isCaptured = false;
-            if (victim.isPromoted) {
-                victim.type = ChessPiece.PAWN;
-                victim.isPromoted = false;
-            }
+        }
+        if (isPromoted) {
+            type = ChessPiece.PAWN;
+            isPromoted = false;
         }
     }
 
@@ -220,22 +218,10 @@ public class Piece implements SearchHandler {
         return false;
     }
 
-    public List<Move> pruneSuicidalMoves(Piece piece, List<Move> moves) {
-        Position initialPosition = piece.getPosition();
-        List<Move> prunedMoves =  new ArrayList<Move>(moves);
-
-        for (Move move : moves) {
-            Optional<Piece> possibleEnemyVictim = piece.setPosition(move.finalPosition());
-            boolean kingInCheck = isKingInCheck(piece.color);
-            if (kingInCheck) { prunedMoves.remove(move); }
-            piece.revertPosition(initialPosition, possibleEnemyVictim);
-        }
-
-        return prunedMoves;
-    }
-
     public void discoverPossibleMoves() {
-        possibleMoves = moveStrategy.discoverPossibleMoves(this);
-        possibleMoves = pruneSuicidalMoves(this, possibleMoves);
+        possibleMoves = Validator.pruneSuicidalMoves(
+            this,
+            moveStrategy.discoverPossibleMoves(this)
+        );
     }
 }

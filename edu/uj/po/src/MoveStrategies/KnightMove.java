@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import edu.uj.po.interfaces.Move;
 import edu.uj.po.interfaces.Position;
-import edu.uj.po.src.BoundsValidator;
+import edu.uj.po.src.Validator;
 import edu.uj.po.src.KnightDirection;
 import edu.uj.po.src.Piece;
 import edu.uj.po.src.interfaces.MoveStrategy;
@@ -20,7 +20,7 @@ public class KnightMove implements MoveStrategy {
     }
 
     private Optional<Position> createPosition(KnightDirection direction) {
-        return BoundsValidator.validatePositionBounds(piece.getPosition(), direction);
+        return Validator.validatePositionBounds(piece.getPosition(), direction);
     }
 
     private Move createMove(Position destination) {
