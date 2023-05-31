@@ -15,42 +15,41 @@ import edu.uj.po.src.interfaces.SearchHandler;
 
 public class Piece implements SearchHandler {
 
-    Piece root;
-    Piece next;
+    Piece root, next;
     Color color;
     ChessPiece type;
     Position position;
-    boolean isCaptured = false;
     MoveStrategy moveStrategy;
+    boolean isCaptured = false;
+    boolean isPromoted = false;
     private List<Move> possibleMoves;
 
     @Override
     public Optional<Move> findMate() {
         Position initialPosition = getPosition();
         for (Move move : getPossibleMoves()) {
-            setPosition(move.finalPosition());
+            Optional<Piece> possibleEnemyVictim = setPosition(move.finalPosition());
 
             List<Piece> enemies = getEnemies();
             for (Piece enemy : enemies) {
                 List<Move> enemyMoves = enemy.getPossibleMoves();
                 Position enemyInitialPosition = enemy.getPosition();
                 for (Move enemyMove : enemyMoves) {
-                    enemy.setPosition(enemyMove.finalPosition());
+                    Optional<Piece> possibleAlliedVictim = enemy.setPosition(enemyMove.finalPosition());
 
                     if (isKingInCheck(getOppositeColor())) {
-                        enemy.setPosition(enemyInitialPosition);
-                        setPosition(initialPosition);
+                        enemy.revertPosition(enemyInitialPosition, possibleAlliedVictim);
+                        revertPosition(initialPosition, possibleEnemyVictim);
                         return Optional.of(move);
                     }
-
-                    enemy.setPosition(enemyInitialPosition);
+                    enemy.revertPosition(enemyInitialPosition, possibleAlliedVictim);
                 }
             }
             if (isKingInCheck(getOppositeColor(color))) {
-                setPosition(initialPosition);
+                revertPosition(initialPosition, possibleEnemyVictim);
                 return Optional.of(move);
             }
-            setPosition(initialPosition);
+            revertPosition(initialPosition, possibleEnemyVictim);
         }
 
         // Resp. chain
@@ -63,18 +62,18 @@ public class Piece implements SearchHandler {
     public Optional<Move> findStaleMate() {
         Position initialPosition = getPosition();
         for (Move move : getPossibleMoves()) {
-            setPosition(move.finalPosition());
+            Optional<Piece> possibleEnemyVictim = setPosition(move.finalPosition());
 
             List<Piece> enemies = getEnemies();
             for (Piece enemy : enemies) {
                 if (enemy.getPossibleMoves().isEmpty()) {
                     if (!isKingInCheck(getOppositeColor())) {
-                        setPosition(initialPosition);
+                        revertPosition(initialPosition, possibleEnemyVictim);
                         return Optional.of(move);
                     }
                 }
             }
-            setPosition(initialPosition);
+            revertPosition(initialPosition, possibleEnemyVictim);
         }
 
         // Resp. chain
@@ -87,7 +86,7 @@ public class Piece implements SearchHandler {
         return position;
     }
 
-    public void setPosition(Position position) {
+    public Optional<Piece> setPosition(Position position) {
         this.position = position;
 
         // Attack
@@ -106,7 +105,24 @@ public class Piece implements SearchHandler {
             boolean promotable = whitePromotable || blackPromotable;
             if (promotable) {
                 type = ChessPiece.QUEEN;
+                isPromoted = true;
                 moveStrategy = new QueenMove(this);
+            }
+        }
+
+        if (possiblePiece.isPresent()) {
+            return Optional.of(possiblePiece.get());
+        } else return Optional.empty();
+    }
+
+    public void revertPosition (Position position, Optional<Piece> possibleVictim) {
+        this.position = position;
+        if (possibleVictim.isPresent()) {
+            Piece victim = possibleVictim.get();
+            victim.isCaptured = false;
+            if (victim.isPromoted) {
+                victim.type = ChessPiece.PAWN;
+                victim.isPromoted = false;
             }
         }
     }
@@ -209,15 +225,12 @@ public class Piece implements SearchHandler {
         List<Move> prunedMoves =  new ArrayList<Move>(moves);
 
         for (Move move : moves) {
-            piece.setPosition(move.finalPosition());
-
+            Optional<Piece> possibleEnemyVictim = piece.setPosition(move.finalPosition());
             boolean kingInCheck = isKingInCheck(piece.color);
-
             if (kingInCheck) { prunedMoves.remove(move); }
-            piece.setPosition(initialPosition);
+            piece.revertPosition(initialPosition, possibleEnemyVictim);
         }
 
-        piece.setPosition(initialPosition);
         return prunedMoves;
     }
 
