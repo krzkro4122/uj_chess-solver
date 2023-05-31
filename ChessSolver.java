@@ -33,6 +33,7 @@ public class ChessSolver implements Setup, Solver {
     @Override
     public void reset() {
         board = new Board();
+        pieceBuilder = new PieceBuilder();
     }
 
     @Override
