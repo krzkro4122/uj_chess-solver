@@ -8,7 +8,6 @@ import edu.uj.po.interfaces.ChessPiece;
 import edu.uj.po.interfaces.Move;
 import edu.uj.po.interfaces.Position;
 import edu.uj.po.interfaces.Rank;
-import edu.uj.po.src.Board;
 import edu.uj.po.src.BoundsValidator;
 import edu.uj.po.src.Direction;
 import edu.uj.po.src.Piece;
@@ -85,6 +84,7 @@ public class PawnMove implements MoveStrategy {
 
     @Override
     public List<Move> discoverPossibleMoves(Piece piece) {
+        this.piece = piece;
         List<Move> moves = new ArrayList<Move>();
 
         // Attacks
