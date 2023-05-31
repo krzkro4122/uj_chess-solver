@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import edu.uj.po.interfaces.Move;
 import edu.uj.po.interfaces.Position;
-import edu.uj.po.src.Board;
 import edu.uj.po.src.BoundsValidator;
 import edu.uj.po.src.KnightDirection;
 import edu.uj.po.src.Piece;
@@ -34,14 +33,14 @@ public class KnightMove implements MoveStrategy {
     }
 
     @Override
-    public List<Move> discoverPossibleMoves(Piece piece, Board board) {
+    public List<Move> discoverPossibleMoves(Piece piece) {
         List<Move> moves = new ArrayList<Move>();
 
         for (KnightDirection direction : KnightDirection.values()) {
             Optional<Position> possibleDestination = createPosition(direction);
             if (possibleDestination.isPresent()) {
                 Position destination = possibleDestination.get();
-                Optional<Piece> possiblePiece = board.checkPosition(destination);
+                Optional<Piece> possiblePiece = piece.checkPosition(destination);
                 if (possiblePiece.isEmpty()) {
                     moves.add(createMove(destination));
                 } else if (possiblePiece.get().getColor() != this.piece.getColor()) {

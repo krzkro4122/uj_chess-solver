@@ -1,5 +1,6 @@
 package edu.uj.po.src;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,11 +14,11 @@ import edu.uj.po.src.interfaces.SearchHandler;
 
 public class Piece implements SearchHandler {
 
+    Piece root;
+    Piece next;
     Color color;
-    Board _board;
     ChessPiece type;
     Position position;
-    Piece previousPiece;
     MoveStrategy moveStrategy;
     private List<Move> possibleMoves;
 
@@ -27,7 +28,7 @@ public class Piece implements SearchHandler {
         discoverPossibleMoves();
         for (Move move : getPossibleMoves()) {
             setPosition(move.finalPosition());
-            List<Piece> enemies = _board.getColoredPieces(getOppositeColor());
+            List<Piece> enemies = getEnemies();
 
             for (Piece enemy : enemies) {
                 enemy.discoverPossibleMoves();
@@ -35,11 +36,11 @@ public class Piece implements SearchHandler {
                 for (Move enemyMove : enemy.getPossibleMoves()) {
                     enemy.setPosition(enemyMove.finalPosition());
 
-                    for (Piece ally : _board.getColoredPieces(color)) {
+                    for (Piece ally : getAllies()) {
                         ally.discoverPossibleMoves();
 
                         for (Move allyMove : ally.getPossibleMoves()) {
-                            Piece enemyKing = _board.getKing(getOppositeColor());
+                            Piece enemyKing = getKing(getOppositeColor());
 
                             if (allyMove.finalPosition().equals(enemyKing.getPosition())) {
                                 setPosition(initialPosition);
@@ -56,8 +57,8 @@ public class Piece implements SearchHandler {
         setPosition(initialPosition);
 
         // Resp. chain
-        if (this.previousPiece != null) {
-            return this.previousPiece.findMate();
+        if (this.next != null) {
+            return this.next.findMate();
         } else return Optional.empty();
     }
 
@@ -67,7 +68,7 @@ public class Piece implements SearchHandler {
         discoverPossibleMoves();
         for (Move move : getPossibleMoves()) {
             setPosition(move.finalPosition());
-            List<Piece> enemies =_board.getColoredPieces(getOppositeColor());
+            List<Piece> enemies = getColoredPieces(getOppositeColor());
 
             for (Piece enemy : enemies) {
                 enemy.discoverPossibleMoves();
@@ -83,29 +84,13 @@ public class Piece implements SearchHandler {
         setPosition(initialPosition);
 
         // Resp. chain
-        if (this.previousPiece != null) {
-            return this.previousPiece.findMate();
+        if (this.next != null) {
+            return this.next.findMate();
         } else return Optional.empty();
     }
 
     public Position getPosition() {
         return position;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public Color getOppositeColor() {
-        return color == Color.WHITE ? Color.BLACK : Color.WHITE;
-    }
-
-    public ChessPiece getType() {
-        return type;
-    }
-
-    public MoveStrategy getMoveStrategy() {
-        return moveStrategy;
     }
 
     public void setPosition(Position position) {
@@ -120,19 +105,78 @@ public class Piece implements SearchHandler {
         }
     }
 
+    public Color getColor() {
+        return color;
+    }
+
+    public Color getOppositeColor() {
+        return color == Color.WHITE ? Color.BLACK : Color.WHITE;
+    }
+
+    public ChessPiece getType() {
+        return type;
+    }
+
+    public Piece getRoot() {
+        return root;
+    }
+
+    public MoveStrategy getMoveStrategy() {
+        return moveStrategy;
+    }
+
     public List<Move> getPossibleMoves() {
-        if (possibleMoves == null) {
-            possibleMoves = moveStrategy.discoverPossibleMoves(this, _board);
-        }
+        if (possibleMoves == null) { discoverPossibleMoves(); }
         return possibleMoves;
     }
 
+    public List<Piece> getColoredPieces(Color color) {
+        List<Piece> coloredPieces = new ArrayList<Piece>();
+        Piece currentPiece = root;
+        while (currentPiece != null) {
+            if (currentPiece.getColor() == color)
+                coloredPieces.add(currentPiece);
+            currentPiece = currentPiece.next;
+        }
+        return coloredPieces;
+    }
+
+    public List<Piece> getAllies() {
+        return getColoredPieces(color);
+    }
+
+    public List<Piece> getEnemies() {
+        return getColoredPieces(getOppositeColor());
+    }
+
+    public Piece getKing(Color color) {
+        Piece currentPiece = root;
+        while (currentPiece != null) {
+            boolean isKing = currentPiece.getType() == ChessPiece.KING;
+            boolean isTheRightColor = currentPiece.getColor() == color;
+            if (isKing && isTheRightColor)
+                return currentPiece;
+            currentPiece = currentPiece.next;
+        }
+        return null;
+    }
+
+    public Optional<Piece> checkPosition(Position position) {
+        Piece currentPiece = root;
+        while (currentPiece != null) {
+            if (currentPiece.getPosition() == position)
+                return Optional.of(currentPiece);
+            currentPiece = currentPiece.next;
+        }
+        return Optional.empty();
+    }
+
     public boolean checkForCheck(Color color, List<Move> allyMoves) {
-        Piece king = _board.getKing(color);
-        List<Piece> enemyPieces = _board.getColoredPieces(king.getOppositeColor());
+        Piece king = getKing(color);
+        List<Piece> enemyPieces = getColoredPieces(king.getOppositeColor());
         for (Piece enemyPiece : enemyPieces) {
 
-            List<Move> potentialEnemyMoves = enemyPiece.getMoveStrategy().discoverPossibleMoves(enemyPiece, _board);
+            List<Move> potentialEnemyMoves = enemyPiece.getMoveStrategy().discoverPossibleMoves(enemyPiece);
             for (Move potentialEnemyMove : potentialEnemyMoves) {
                 for (Move allyMove : allyMoves) {
                     if (potentialEnemyMove.finalPosition() == allyMove.finalPosition()) {
@@ -144,8 +188,7 @@ public class Piece implements SearchHandler {
         return false;
     }
 
-
-    public List<Move> pruneSuicidalMoves(Piece piece, Board board, List<Move> moves) {
+    public List<Move> pruneSuicidalMoves(Piece piece, List<Move> moves) {
         Position initialPosition = piece.getPosition();
 
         for (Move move : moves) {
@@ -160,7 +203,7 @@ public class Piece implements SearchHandler {
     }
 
     public void discoverPossibleMoves() {
-        possibleMoves = moveStrategy.discoverPossibleMoves(this, _board);
-        possibleMoves = pruneSuicidalMoves(this, _board, possibleMoves);
+        possibleMoves = moveStrategy.discoverPossibleMoves(this);
+        possibleMoves = pruneSuicidalMoves(this, possibleMoves);
     }
 }

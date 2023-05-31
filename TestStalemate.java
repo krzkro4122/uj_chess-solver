@@ -17,6 +17,7 @@ public class TestStalemate {
         chessSolver.addChessPiece(new Position(File.a, Rank.EIGHTH), Color.WHITE, ChessPiece.KING);
 
         Optional<Move> stalemateMove = chessSolver.findStalemateInOneMove(Color.BLACK);
+        System.out.println(stalemateMove);
         return stalemateMove.isPresent();
     }
 

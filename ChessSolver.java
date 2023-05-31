@@ -40,7 +40,7 @@ public class ChessSolver implements Setup, Solver {
         pieceBuilder.setColor(color);
         pieceBuilder.setPosition(position);
         pieceBuilder.setType(piece);
-        Piece newPiece = pieceBuilder.build(board);
+        Piece newPiece = pieceBuilder.build();
         board.addChessPiece(newPiece);
     }
 

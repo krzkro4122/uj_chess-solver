@@ -43,20 +43,12 @@ public class Board implements Solver {
         pieces.add(piece);
     }
 
-    public Optional<Piece> checkPosition(Position position) {
-        return pieces
-            .stream()
-            .filter(p -> p.getPosition().equals(position))
-            .findFirst();
-    }
-
-    public Piece getKing(Color color) {
-        return pieces
-            .stream()
-            .filter(piece -> piece.getColor() == color && piece.getType().equals(ChessPiece.KING))
-            .findFirst()
-            .get();
-    }
+    // public Optional<Piece> checkPosition(Position position) {
+    //     return pieces
+    //         .stream()
+    //         .filter(p -> p.getPosition().equals(position))
+    //         .findFirst();
+    // }
 
     @Override
     public Optional<Move> findMateInOneMove(Color color) {

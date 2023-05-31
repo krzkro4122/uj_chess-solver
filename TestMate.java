@@ -18,6 +18,19 @@ public class TestMate {
         chessSolver.addChessPiece(new Position(File.h, Rank.SECOND), Color.WHITE, ChessPiece.KING);
 
         Optional<Move> mateMove = chessSolver.findMateInOneMove(Color.BLACK);
+        System.out.println(mateMove);
+        return mateMove.isPresent();
+    }
+
+    public static boolean case2() {
+        ChessSolver chessSolver = new ChessSolver();
+
+        chessSolver.addChessPiece(new Position(File.e, Rank.SIXTH), Color.BLACK, ChessPiece.QUEEN);
+        chessSolver.addChessPiece(new Position(File.b, Rank.SIXTH), Color.BLACK, ChessPiece.KING);
+        chessSolver.addChessPiece(new Position(File.a, Rank.EIGHTH), Color.WHITE, ChessPiece.KING);
+
+        Optional<Move> mateMove = chessSolver.findMateInOneMove(Color.BLACK);
+        System.out.println(mateMove);
         return mateMove.isPresent();
     }
 

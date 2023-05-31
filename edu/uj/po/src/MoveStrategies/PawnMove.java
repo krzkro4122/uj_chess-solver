@@ -45,7 +45,7 @@ public class PawnMove implements MoveStrategy {
         );
     }
 
-    private List<Move> leftAttack(Board board) {
+    private List<Move> leftAttack() {
         List<Move> moves = new ArrayList<Move>();
 
         Optional<Position> leftAttackPossiblePosition = createPosition(1, Direction.NORTH_WEST);
@@ -54,7 +54,7 @@ public class PawnMove implements MoveStrategy {
                 return null;
 
             Position leftAttackPosition = leftAttackPossiblePosition.get();
-            Optional<Piece> potentialPiece = board.checkPosition(leftAttackPosition);
+            Optional<Piece> potentialPiece = piece.checkPosition(leftAttackPosition);
             if (potentialPiece.isPresent()) {
                 Piece detectedPiece = potentialPiece.get();
                 if (detectedPiece.getColor() != piece.getColor()) {
@@ -64,7 +64,7 @@ public class PawnMove implements MoveStrategy {
         return moves;
     }
 
-    private List<Move> rightAttack(Board board) {
+    private List<Move> rightAttack() {
         List<Move> moves = new ArrayList<Move>();
 
         Optional<Position> rightAttackPossiblePosition = createPosition(1, Direction.NORTH_EAST);
@@ -73,7 +73,7 @@ public class PawnMove implements MoveStrategy {
                 return null;
 
             Position rightAttackPosition = rightAttackPossiblePosition.get();
-            Optional<Piece> potentialPiece = board.checkPosition(rightAttackPosition);
+            Optional<Piece> potentialPiece = piece.checkPosition(rightAttackPosition);
             if (potentialPiece.isPresent()) {
                 Piece detectedPiece = potentialPiece.get();
                 if (detectedPiece.getColor() != piece.getColor()) {
@@ -84,26 +84,26 @@ public class PawnMove implements MoveStrategy {
     }
 
     @Override
-    public List<Move> discoverPossibleMoves(Piece piece, Board board) {
+    public List<Move> discoverPossibleMoves(Piece piece) {
         List<Move> moves = new ArrayList<Move>();
 
         // Attacks
-        moves.addAll(leftAttack(board));
-        moves.addAll(rightAttack(board));
+        moves.addAll(leftAttack());
+        moves.addAll(rightAttack());
 
         // Simple moves
         Optional<Position> possiblePositionInFront = createPosition(1, Direction.NORTH);
         if (possiblePositionInFront.isEmpty())
             return moves;
         Position positionInFront = possiblePositionInFront.get();
-        Optional<Piece> potentialPiece = board.checkPosition(positionInFront);
+        Optional<Piece> potentialPiece = piece.checkPosition(positionInFront);
         if (potentialPiece.isEmpty()) {
             moves.add(createMove(positionInFront));
             possiblePositionInFront = createPosition(2, Direction.NORTH);
             if (possiblePositionInFront.isEmpty())
                 return moves;
             positionInFront = possiblePositionInFront.get();
-            potentialPiece = board.checkPosition(positionInFront);
+            potentialPiece = piece.checkPosition(positionInFront);
             if (!hasAlreadyMoved() && potentialPiece.isEmpty()) {
                 moves.add(createMove(positionInFront));
             }

@@ -25,6 +25,7 @@ public class TestRunner {
 
         System.out.println("Testing mate search...");
         assertify(TestMate.case1(), "Case 1");
+        assertify(TestMate.case2(), "Case 2");
         System.out.println("Mate search - OK");
 
         System.out.println("Testing stalemate search...");

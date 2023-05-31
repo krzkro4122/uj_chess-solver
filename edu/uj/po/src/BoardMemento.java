@@ -18,7 +18,7 @@ public class BoardMemento {
         pieceBuilder.setColor(piece.getColor());
         pieceBuilder.setPosition(piece.getPosition());
         pieceBuilder.setType(piece.getType());
-        return pieceBuilder.build(piece._board);
+        return pieceBuilder.build();
     }
 
     public List<Piece> getBoard() {

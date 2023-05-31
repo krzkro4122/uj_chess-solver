@@ -12,7 +12,8 @@ public class PieceBuilder implements Builder {
     private Color color;
     private ChessPiece type;
     private Position position;
-    private Piece previousPiece;
+    private Piece previous;
+    private Piece root;
     private MoveStrategy moveStrategy;
 
     public PieceBuilder() {}
@@ -60,18 +61,21 @@ public class PieceBuilder implements Builder {
     }
 
     @Override
-    public Piece build(Board board) {
+    public Piece build() {
         Piece piece = new Piece();
-        piece.color = color;
         piece.type = type;
+        piece.color = color;
         piece.position = position;
-        piece._board = board;
-        moveStrategy = determineMoveStrategy(piece);
-        piece.moveStrategy = moveStrategy;
-        if (previousPiece != null) {
-            piece.previousPiece = previousPiece;
+        piece.moveStrategy = determineMoveStrategy(piece);
+
+        if (root == null) {
+            root = piece;
+        } else {
+            previous.next = piece;
         }
-        previousPiece = piece;
+        previous = piece;
+        piece.root = piece;
+
         return piece;
     }
 }

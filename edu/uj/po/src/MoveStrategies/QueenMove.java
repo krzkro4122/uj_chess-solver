@@ -33,13 +33,13 @@ public class QueenMove implements MoveStrategy {
         );
     }
 
-    private List<Move> scanDirectionForMoves(Direction direction, Board board) {
+    private List<Move> scanDirectionForMoves(Direction direction) {
         List<Move> moves = new ArrayList<Move>();
         for (int i = 1; i < 8; i++) {
             Optional<Position> possibleDestination = createPosition(i, direction);
             if (possibleDestination.isPresent()) {
                 Position destination = possibleDestination.get();
-                Optional<Piece> possiblePiece = board.checkPosition(possibleDestination.get());
+                Optional<Piece> possiblePiece = piece.checkPosition(possibleDestination.get());
                 if (possiblePiece.isEmpty()) {
                     moves.add(createMove(destination));
                 } else if (possiblePiece.get().getColor() != piece.getColor()) {
@@ -54,7 +54,7 @@ public class QueenMove implements MoveStrategy {
     }
 
     @Override
-    public List<Move> discoverPossibleMoves(Piece piece, Board board) {
+    public List<Move> discoverPossibleMoves(Piece piece) {
         List<Move> moves = new ArrayList<Move>();
         List<Direction> rookDirections = List.of(
             Direction.NORTH_EAST,   Direction.SOUTH_EAST,   Direction.SOUTH_WEST,   Direction.NORTH_WEST,
@@ -62,7 +62,7 @@ public class QueenMove implements MoveStrategy {
         );
 
         for (Direction direction : rookDirections) {
-            moves.addAll(scanDirectionForMoves(direction, board));
+            moves.addAll(scanDirectionForMoves(direction));
         }
 
         return moves;
