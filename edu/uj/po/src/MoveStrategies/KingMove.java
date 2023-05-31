@@ -14,20 +14,18 @@ import edu.uj.po.src.interfaces.MoveStrategy;
 public class KingMove implements MoveStrategy {
 
     private Piece piece;
-    private Position currentPosition;
 
     public KingMove(Piece piece) {
         this.piece = piece;
-        currentPosition = piece.getPosition();
     }
 
     private Optional<Position> createPosition(int amount, Direction direction) {
-        return BoundsValidator.validatePositionBounds(currentPosition, direction, amount);
+        return BoundsValidator.validatePositionBounds(piece.getPosition(), direction, amount);
     }
 
     private Move createMove(Position destination) {
         return new Move(
-            currentPosition,
+            piece.getPosition(),
             destination
         );
     }
@@ -38,7 +36,7 @@ public class KingMove implements MoveStrategy {
             Optional<Position> possibleDestination = createPosition(i, direction);
             if (possibleDestination.isPresent()) {
                 Position destination = possibleDestination.get();
-                Optional<Piece> possiblePiece = piece.checkPosition(possibleDestination.get());
+                Optional<Piece> possiblePiece = piece.checkWhoIsAt(possibleDestination.get());
                 if (possiblePiece.isEmpty()) {
                     moves.add(createMove(destination));
                 } else if (possiblePiece.get().getColor() != piece.getColor()) {

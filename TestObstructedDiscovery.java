@@ -13,7 +13,7 @@ public class TestObstructedDiscovery {
         ChessSolver chessSolver = new ChessSolver();
         chessSolver.addChessPiece(new Position(File.f, Rank.FIFTH), Color.WHITE, ChessPiece.KING);
         // Obstacles
-        chessSolver.addChessPiece(new Position(File.f, Rank.SIXTH), Color.BLACK, ChessPiece.PAWN);
+        chessSolver.addChessPiece(new Position(File.f, Rank.SIXTH), Color.BLACK, ChessPiece.ROOK);
         chessSolver.addChessPiece(new Position(File.f, Rank.FOURTH), Color.WHITE, ChessPiece.PAWN);
         chessSolver.addChessPiece(new Position(File.e, Rank.FIFTH), Color.WHITE, ChessPiece.PAWN);
         chessSolver.addChessPiece(new Position(File.g, Rank.FIFTH), Color.WHITE, ChessPiece.PAWN);
@@ -21,7 +21,7 @@ public class TestObstructedDiscovery {
         chessSolver.addChessPiece(new Position(File.h, Rank.FIRST), Color.WHITE, ChessPiece.PAWN);
         List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
-        if (moveList.size() == 5) {
+        if (moveList.size() == 3) {
             return true;
         }
         return false;
@@ -35,7 +35,7 @@ public class TestObstructedDiscovery {
         chessSolver.addChessPiece(new Position(File.d, Rank.FIRST), Color.WHITE, ChessPiece.PAWN);
         chessSolver.addChessPiece(new Position(File.c, Rank.FIFTH), Color.WHITE, ChessPiece.PAWN);
         // Control group
-        chessSolver.addChessPiece(new Position(File.h, Rank.FIRST), Color.WHITE, ChessPiece.PAWN);
+        chessSolver.addChessPiece(new Position(File.h, Rank.FIRST), Color.WHITE, ChessPiece.KING);
         List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 9) {
@@ -52,7 +52,7 @@ public class TestObstructedDiscovery {
         chessSolver.addChessPiece(new Position(File.a, Rank.SECOND), Color.WHITE, ChessPiece.PAWN);
         chessSolver.addChessPiece(new Position(File.h, Rank.FIRST), Color.WHITE, ChessPiece.PAWN);
         // Control group
-        chessSolver.addChessPiece(new Position(File.h, Rank.FIFTH), Color.WHITE, ChessPiece.PAWN);
+        chessSolver.addChessPiece(new Position(File.h, Rank.FIFTH), Color.WHITE, ChessPiece.KING);
         List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 9) {
@@ -74,7 +74,7 @@ public class TestObstructedDiscovery {
         chessSolver.addChessPiece(new Position(File.h, Rank.FOURTH), Color.WHITE, ChessPiece.PAWN); // 3
         chessSolver.addChessPiece(new Position(File.d, Rank.FIRST), Color.WHITE, ChessPiece.PAWN); // 2
         // Control group
-        chessSolver.addChessPiece(new Position(File.h, Rank.FIFTH), Color.WHITE, ChessPiece.PAWN);
+        chessSolver.addChessPiece(new Position(File.h, Rank.FIFTH), Color.WHITE, ChessPiece.KING);
         List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 14) {
@@ -92,7 +92,7 @@ public class TestObstructedDiscovery {
         chessSolver.addChessPiece(new Position(File.c, Rank.SECOND), Color.WHITE, ChessPiece.PAWN);
         chessSolver.addChessPiece(new Position(File.e, Rank.SECOND), Color.WHITE, ChessPiece.PAWN);
         // Control group
-        chessSolver.addChessPiece(new Position(File.h, Rank.FIFTH), Color.WHITE, ChessPiece.PAWN);
+        chessSolver.addChessPiece(new Position(File.h, Rank.FIFTH), Color.WHITE, ChessPiece.KING);
         List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 5) {
@@ -107,7 +107,7 @@ public class TestObstructedDiscovery {
         // Obstacles
         chessSolver.addChessPiece(new Position(File.e, Rank.FOURTH), Color.WHITE, ChessPiece.PAWN);
         // Control group
-        chessSolver.addChessPiece(new Position(File.h, Rank.FIFTH), Color.WHITE, ChessPiece.PAWN);
+        chessSolver.addChessPiece(new Position(File.h, Rank.FIFTH), Color.WHITE, ChessPiece.KING);
         List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 1) {
@@ -124,7 +124,7 @@ public class TestObstructedDiscovery {
         chessSolver.addChessPiece(new Position(File.d, Rank.SEVENTH), Color.WHITE, ChessPiece.ROOK);
         chessSolver.addChessPiece(new Position(File.c, Rank.SEVENTH), Color.WHITE, ChessPiece.PAWN);
         // Control group
-        chessSolver.addChessPiece(new Position(File.h, Rank.FIFTH), Color.WHITE, ChessPiece.PAWN);
+        chessSolver.addChessPiece(new Position(File.h, Rank.FIFTH), Color.WHITE, ChessPiece.KING);
         List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 1) {

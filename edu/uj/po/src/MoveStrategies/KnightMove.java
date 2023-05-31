@@ -14,20 +14,18 @@ import edu.uj.po.src.interfaces.MoveStrategy;
 public class KnightMove implements MoveStrategy {
 
     private Piece piece;
-    private Position currentPosition;
 
     public KnightMove(Piece piece) {
         this.piece = piece;
-        currentPosition = piece.getPosition();
     }
 
     private Optional<Position> createPosition(KnightDirection direction) {
-        return BoundsValidator.validatePositionBounds(currentPosition, direction);
+        return BoundsValidator.validatePositionBounds(piece.getPosition(), direction);
     }
 
     private Move createMove(Position destination) {
         return new Move(
-            currentPosition,
+            piece.getPosition(),
             destination
         );
     }
@@ -40,7 +38,7 @@ public class KnightMove implements MoveStrategy {
             Optional<Position> possibleDestination = createPosition(direction);
             if (possibleDestination.isPresent()) {
                 Position destination = possibleDestination.get();
-                Optional<Piece> possiblePiece = piece.checkPosition(destination);
+                Optional<Piece> possiblePiece = piece.checkWhoIsAt(destination);
                 if (possiblePiece.isEmpty()) {
                     moves.add(createMove(destination));
                 } else if (possiblePiece.get().getColor() != this.piece.getColor()) {

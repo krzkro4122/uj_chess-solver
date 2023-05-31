@@ -14,7 +14,6 @@ public class PieceBuilder implements Builder {
     private Position position;
     private Piece previous;
     private Piece root;
-    private MoveStrategy moveStrategy;
 
     public PieceBuilder() {}
 
@@ -74,7 +73,7 @@ public class PieceBuilder implements Builder {
             previous.next = piece;
         }
         previous = piece;
-        piece.root = piece;
+        piece.root = root;
 
         return piece;
     }

@@ -23,6 +23,7 @@ public class TestSimpleDiscovery {
     public static boolean testRookDiscovery() {
         ChessSolver chessSolver = new ChessSolver();
         chessSolver.addChessPiece(new Position(File.d, Rank.FIFTH), Color.WHITE, ChessPiece.ROOK);
+        chessSolver.addChessPiece(new Position(File.h, Rank.FIRST), Color.WHITE, ChessPiece.KING);
         List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 14) {
@@ -34,6 +35,7 @@ public class TestSimpleDiscovery {
     public static boolean testBishopDiscovery() {
         ChessSolver chessSolver = new ChessSolver();
         chessSolver.addChessPiece(new Position(File.d, Rank.FIFTH), Color.WHITE, ChessPiece.BISHOP);
+        chessSolver.addChessPiece(new Position(File.g, Rank.FIRST), Color.WHITE, ChessPiece.KING);
         List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 13) {
@@ -45,6 +47,7 @@ public class TestSimpleDiscovery {
     public static boolean testQueenDiscovery() {
         ChessSolver chessSolver = new ChessSolver();
         chessSolver.addChessPiece(new Position(File.d, Rank.FOURTH), Color.WHITE, ChessPiece.QUEEN);
+        chessSolver.addChessPiece(new Position(File.h, Rank.FIRST), Color.WHITE, ChessPiece.KING);
         List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 27) {
@@ -56,6 +59,7 @@ public class TestSimpleDiscovery {
     public static boolean testKnightDiscovery() {
         ChessSolver chessSolver = new ChessSolver();
         chessSolver.addChessPiece(new Position(File.d, Rank.FOURTH), Color.WHITE, ChessPiece.KNIGHT);
+        chessSolver.addChessPiece(new Position(File.h, Rank.FIRST), Color.WHITE, ChessPiece.KING);
         List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 8) {
@@ -67,6 +71,7 @@ public class TestSimpleDiscovery {
     public static boolean testPawnDiscoverySimple() {
         ChessSolver chessSolver = new ChessSolver();
         chessSolver.addChessPiece(new Position(File.e, Rank.SECOND), Color.WHITE, ChessPiece.PAWN);
+        chessSolver.addChessPiece(new Position(File.h, Rank.FIRST), Color.WHITE, ChessPiece.KING);
         List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 2) {
@@ -80,6 +85,7 @@ public class TestSimpleDiscovery {
         chessSolver.addChessPiece(new Position(File.c, Rank.SIXTH), Color.WHITE, ChessPiece.PAWN);
         chessSolver.addChessPiece(new Position(File.b, Rank.SEVENTH), Color.BLACK, ChessPiece.ROOK);
         chessSolver.addChessPiece(new Position(File.d, Rank.SEVENTH), Color.BLACK, ChessPiece.ROOK);
+        chessSolver.addChessPiece(new Position(File.h, Rank.FIRST), Color.WHITE, ChessPiece.KING);
         List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 3) {
