@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import edu.uj.po.interfaces.ChessPiece;
 import edu.uj.po.interfaces.Color;
 import edu.uj.po.interfaces.Move;
-import edu.uj.po.interfaces.Position;
 import edu.uj.po.interfaces.Solver;
 
 public class Board implements Solver {
@@ -43,13 +41,6 @@ public class Board implements Solver {
         pieces.add(piece);
     }
 
-    // public Optional<Piece> checkPosition(Position position) {
-    //     return pieces
-    //         .stream()
-    //         .filter(p -> p.getPosition().equals(position))
-    //         .findFirst();
-    // }
-
     @Override
     public Optional<Move> findMateInOneMove(Color color) {
         Piece coloredRepresentant = pieces
@@ -57,7 +48,7 @@ public class Board implements Solver {
             .filter(p -> p.getColor() == color)
             .findFirst()
             .get();
-        return coloredRepresentant.findMate();
+        return coloredRepresentant.root.findMate();
     }
 
     @Override
@@ -67,6 +58,6 @@ public class Board implements Solver {
             .filter(p -> p.getColor() == color)
             .findFirst()
             .get();
-        return coloredRepresentant.findStaleMate();
+        return coloredRepresentant.root.findStaleMate();
     }
 }

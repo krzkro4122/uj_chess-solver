@@ -23,10 +23,10 @@ public class TestRunner {
         // assertify(TestObstructedDiscovery.testPawnDiscoveryAttack(), "Pawn (attack)");
         // System.out.println("Obstructed move discovery - OK");
 
-        // System.out.println("Testing mate search...");
-        // assertify(TestMate.case1(), "Case 1");
-        // assertify(TestMate.case2(), "Case 2");
-        // System.out.println("Mate search - OK");
+        System.out.println("Testing mate search...");
+        assertify(TestMate.case1(), "Case 1");
+        assertify(TestMate.case2(), "Case 2");
+        System.out.println("Mate search - OK");
 
         System.out.println("Testing stalemate search...");
         assertify(TestStalemate.case1(), "Case 1");

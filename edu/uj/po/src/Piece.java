@@ -20,46 +20,67 @@ public class Piece implements SearchHandler {
     Color color;
     ChessPiece type;
     Position position;
+    boolean isCaptured = false;
     MoveStrategy moveStrategy;
     private List<Move> possibleMoves;
 
     @Override
     public Optional<Move> findMate() {
-        Piece currentPiece = root;
+        Position initialPosition = getPosition();
+        for (Move move : getPossibleMoves()) {
+            setPosition(move.finalPosition());
 
-        // find it
+            List<Piece> enemies = getEnemies();
+            for (Piece enemy : enemies) {
+                List<Move> enemyMoves = enemy.getPossibleMoves();
+                Position enemyInitialPosition = enemy.getPosition();
+                for (Move enemyMove : enemyMoves) {
+                    enemy.setPosition(enemyMove.finalPosition());
+
+                    if (isKingInCheck(getOppositeColor())) {
+                        enemy.setPosition(enemyInitialPosition);
+                        setPosition(initialPosition);
+                        return Optional.of(move);
+                    }
+
+                    enemy.setPosition(enemyInitialPosition);
+                }
+            }
+            if (isKingInCheck(getOppositeColor(color))) {
+                setPosition(initialPosition);
+                return Optional.of(move);
+            }
+            setPosition(initialPosition);
+        }
 
         // Resp. chain
-        currentPiece = currentPiece.next;
-        if (currentPiece != null) {
-            return currentPiece.findMate();
-        } else return Optional.empty();
+        if (this.next == null) {
+            return Optional.empty();
+        } else return this.next.findMate();
     }
 
     @Override
     public Optional<Move> findStaleMate() {
-        Piece currentPiece = root;
-        Position initialPosition = currentPiece.getPosition();
+        Position initialPosition = getPosition();
+        for (Move move : getPossibleMoves()) {
+            setPosition(move.finalPosition());
 
-        for (Move move : currentPiece.getPossibleMoves()) {
-            currentPiece.setPosition(move.finalPosition());
-
-            List<Piece> enemies = currentPiece.getEnemies();
+            List<Piece> enemies = getEnemies();
             for (Piece enemy : enemies) {
                 if (enemy.getPossibleMoves().isEmpty()) {
-                    currentPiece.setPosition(initialPosition);
-                    return Optional.of(move);
+                    if (!isKingInCheck(getOppositeColor())) {
+                        setPosition(initialPosition);
+                        return Optional.of(move);
+                    }
                 }
             }
-
-            currentPiece.setPosition(initialPosition);
+            setPosition(initialPosition);
         }
 
         // Resp. chain
-        currentPiece = currentPiece.next;
-        if (currentPiece != null) {
-            return currentPiece.findMate();
-        } else return Optional.empty();
+        if (this.next == null) {
+            return Optional.empty();
+        } else return this.next.findMate();
     }
 
     public Position getPosition() {
@@ -68,6 +89,15 @@ public class Piece implements SearchHandler {
 
     public void setPosition(Position position) {
         this.position = position;
+
+        // Attack
+        Optional<Piece> possiblePiece = checkWhoIsAt(position);
+        if (possiblePiece.isPresent()) {
+            Piece attackedPiece = possiblePiece.get();
+            if (attackedPiece.getColor() != color) {
+                attackedPiece.isCaptured = true;
+            }
+        }
 
         // Promotion
         if (type == ChessPiece.PAWN) {
@@ -86,6 +116,10 @@ public class Piece implements SearchHandler {
     }
 
     public Color getOppositeColor() {
+        return color == Color.WHITE ? Color.BLACK : Color.WHITE;
+    }
+
+    public Color getOppositeColor(Color color) {
         return color == Color.WHITE ? Color.BLACK : Color.WHITE;
     }
 
@@ -110,7 +144,7 @@ public class Piece implements SearchHandler {
         List<Piece> coloredPieces = new ArrayList<Piece>();
         Piece currentPiece = root;
         while (currentPiece != null) {
-            if (currentPiece.getColor() == color) {
+            if (currentPiece.getColor() == color && !currentPiece.isCaptured) {
                 coloredPieces.add(currentPiece);
             }
             currentPiece = currentPiece.next;
@@ -119,11 +153,17 @@ public class Piece implements SearchHandler {
     }
 
     public List<Piece> getAllies() {
-        return getColoredPieces(color);
+        return getColoredPieces(color)
+            .stream()
+            .filter(piece -> !piece.isCaptured)
+            .toList();
     }
 
     public List<Piece> getEnemies() {
-        return getColoredPieces(getOppositeColor());
+        return getColoredPieces(getOppositeColor())
+            .stream()
+            .filter(piece -> !piece.isCaptured)
+            .toList();
     }
 
     public Piece getKing(Color color) {
@@ -142,7 +182,7 @@ public class Piece implements SearchHandler {
     public Optional<Piece> checkWhoIsAt(Position position) {
         Piece currentPiece = root;
         while (currentPiece != null) {
-            if (currentPiece.getPosition().equals(position)) {
+            if (currentPiece.getPosition().equals(position) && !currentPiece.isCaptured) {
                 return Optional.of(currentPiece);
             }
             currentPiece = currentPiece.next;
@@ -152,7 +192,7 @@ public class Piece implements SearchHandler {
 
     public boolean isKingInCheck(Color color) {
         Position kingPosition = getKing(color).getPosition();
-        List<Piece> enemies = getEnemies();
+        List<Piece> enemies = getColoredPieces(getOppositeColor(color));
         for (Piece enemy : enemies) {
             List<Move> enemyMoves = enemy.getMoveStrategy().discoverPossibleMoves(enemy);
             for (Move enemyMove : enemyMoves) {

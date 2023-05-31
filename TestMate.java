@@ -10,6 +10,7 @@ import edu.uj.po.interfaces.Rank;
 public class TestMate {
 
     public static boolean case1() {
+        // https://lichess.org/97Cxaqvr#2
         ChessSolver chessSolver = new ChessSolver();
 
         chessSolver.addChessPiece(new Position(File.h, Rank.FOURTH), Color.BLACK, ChessPiece.KNIGHT);
@@ -23,10 +24,12 @@ public class TestMate {
     }
 
     public static boolean case2() {
+        // https://lichess.org/UdVfaoy0
         ChessSolver chessSolver = new ChessSolver();
 
         chessSolver.addChessPiece(new Position(File.e, Rank.SIXTH), Color.BLACK, ChessPiece.QUEEN);
         chessSolver.addChessPiece(new Position(File.b, Rank.SIXTH), Color.BLACK, ChessPiece.KING);
+        chessSolver.addChessPiece(new Position(File.h, Rank.THIRD), Color.WHITE, ChessPiece.PAWN);
         chessSolver.addChessPiece(new Position(File.a, Rank.EIGHTH), Color.WHITE, ChessPiece.KING);
 
         Optional<Move> mateMove = chessSolver.findMateInOneMove(Color.BLACK);

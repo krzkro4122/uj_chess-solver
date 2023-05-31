@@ -48,7 +48,7 @@ public class PawnMove implements MoveStrategy {
         Optional<Position> leftAttackPossiblePosition = createPosition(1, Direction.NORTH_WEST);
 
             if (leftAttackPossiblePosition.isEmpty())
-                return null;
+                return List.of();
 
             Position leftAttackPosition = leftAttackPossiblePosition.get();
             Optional<Piece> potentialPiece = piece.checkWhoIsAt(leftAttackPosition);
@@ -67,7 +67,7 @@ public class PawnMove implements MoveStrategy {
         Optional<Position> rightAttackPossiblePosition = createPosition(1, Direction.NORTH_EAST);
 
             if (rightAttackPossiblePosition.isEmpty())
-                return null;
+                return List.of();
 
             Position rightAttackPosition = rightAttackPossiblePosition.get();
             Optional<Piece> potentialPiece = piece.checkWhoIsAt(rightAttackPosition);
