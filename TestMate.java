@@ -37,4 +37,21 @@ public class TestMate {
         return mateMove.isPresent();
     }
 
+    public static boolean promotion() {
+        // https://lichess.org/
+        ChessSolver chessSolver = new ChessSolver();
+
+        chessSolver.addChessPiece(new Position(File.d, Rank.SECOND), Color.BLACK, ChessPiece.PAWN);
+        chessSolver.addChessPiece(new Position(File.a, Rank.EIGHTH), Color.BLACK, ChessPiece.KING);
+        chessSolver.addChessPiece(new Position(File.b, Rank.SECOND), Color.WHITE, ChessPiece.KING);
+
+        chessSolver.addChessPiece(new Position(File.a, Rank.FIFTH), Color.BLACK, ChessPiece.KING);
+        chessSolver.addChessPiece(new Position(File.c, Rank.FIFTH), Color.BLACK, ChessPiece.KING);
+        chessSolver.addChessPiece(new Position(File.g, Rank.FOURTH), Color.BLACK, ChessPiece.KING);
+        chessSolver.addChessPiece(new Position(File.g, Rank.SECOND), Color.BLACK, ChessPiece.KING);
+
+        Optional<Move> mateMove = chessSolver.findMateInOneMove(Color.BLACK);
+        System.out.println(mateMove);
+        return mateMove.isPresent();
+    }
 }

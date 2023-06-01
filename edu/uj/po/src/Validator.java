@@ -1,15 +1,16 @@
 package edu.uj.po.src;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
+import java.util.List;
 
+import edu.uj.po.interfaces.Position;
 import edu.uj.po.interfaces.File;
 import edu.uj.po.interfaces.Move;
-import edu.uj.po.interfaces.Position;
 import edu.uj.po.interfaces.Rank;
 
 public class Validator {
+
     public static Optional<Position> validatePositionBounds(Position currentPosition, Direction direction, int amount) {
         File startFile = currentPosition.file();
         Rank startRank = currentPosition.rank();
@@ -57,5 +58,4 @@ public class Validator {
 
         return prunedMoves;
     }
-
 }

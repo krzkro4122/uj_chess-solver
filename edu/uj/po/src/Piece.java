@@ -1,23 +1,23 @@
 package edu.uj.po.src;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
+import java.util.List;
 
 import edu.uj.po.interfaces.ChessPiece;
+import edu.uj.po.interfaces.Position;
 import edu.uj.po.interfaces.Color;
 import edu.uj.po.interfaces.Move;
-import edu.uj.po.interfaces.Position;
 import edu.uj.po.interfaces.Rank;
 import edu.uj.po.src.MoveStrategies.QueenMove;
-import edu.uj.po.src.interfaces.MoveStrategy;
 import edu.uj.po.src.interfaces.SearchHandler;
+import edu.uj.po.src.interfaces.MoveStrategy;
 
 public class Piece implements SearchHandler {
 
-    Piece root, next;
     Color color;
     ChessPiece type;
+    Piece root, next;
     Position position;
     MoveStrategy moveStrategy;
     boolean isCaptured = false;
@@ -25,7 +25,13 @@ public class Piece implements SearchHandler {
     private List<Move> possibleMoves;
 
     @Override
-    public Optional<Move> findMate() {
+    public Optional<Move> findMate(Color color) {
+
+        // Resp. chain filter
+        if (getColor() != color) {
+            return this.next.findMate(color);
+        }
+
         Position initialPosition = getPosition();
         for (Move move : getPossibleMoves()) {
             Optional<Piece> possibleEnemyVictim = setPosition(move.finalPosition());
@@ -55,29 +61,37 @@ public class Piece implements SearchHandler {
         // Resp. chain
         if (this.next == null) {
             return Optional.empty();
-        } else return this.next.findMate();
+        } else return this.next.findMate(color);
     }
 
     @Override
-    public Optional<Move> findStaleMate() {
+    public Optional<Move> findStaleMate(Color color) {
+
+        // Resp. chain filter
+        if (this.color != color) {
+            return this.next.findMate(color);
+        }
+
         Position initialPosition = getPosition();
         for (Move move : getPossibleMoves()) {
             Optional<Piece> possibleEnemyVictim = setPosition(move.finalPosition());
 
             List<Piece> enemies = getEnemies();
+            List<Move> discoveredEnemyMoves = new ArrayList<Move>(10);
             for (Piece enemy : enemies) {
-                if (enemy.getPossibleMoves().isEmpty()) {
-                    revertPosition(initialPosition, possibleEnemyVictim);
-                    return Optional.of(move);
-                }
+                discoveredEnemyMoves.addAll(enemy.getPossibleMoves());
+                revertPosition(initialPosition, possibleEnemyVictim);
             }
+
+            if (discoveredEnemyMoves.isEmpty()) { return Optional.of(move); }
+
             revertPosition(initialPosition, possibleEnemyVictim);
         }
 
         // Resp. chain
         if (this.next == null) {
             return Optional.empty();
-        } else return this.next.findMate();
+        } else return this.next.findMate(color);
     }
 
     public Position getPosition() {
@@ -86,6 +100,8 @@ public class Piece implements SearchHandler {
 
     public Optional<Piece> setPosition(Position position) {
         this.position = position;
+
+        // TODO - handle en passant
 
         // Capture
         Optional<Piece> possiblePiece = checkWhoIsAt(position);
