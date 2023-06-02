@@ -32,8 +32,7 @@ public class Piece implements SearchHandler {
         if (getColor() != color) {
             if (next == null) {
                 return Optional.empty();
-            }
-            return next.findMate(color);
+            } else return next.findMate(color);
         }
 
         Position initialPosition = getPosition();
@@ -75,7 +74,9 @@ public class Piece implements SearchHandler {
 
         // Resp. chain filter
         if (this.color != color) {
-            return this.next.findMate(color);
+            if (this.next == null) {
+                return Optional.empty();
+            } else return this.next.findStaleMate(color);
         }
 
         Position initialPosition = getPosition();
@@ -89,7 +90,10 @@ public class Piece implements SearchHandler {
                 revertPosition(initialPosition, possibleEnemyVictim);
             }
 
-            if (discoveredEnemyMoves.isEmpty()) { return Optional.of(move); }
+            if (discoveredEnemyMoves.isEmpty()) {
+                revertPosition(initialPosition, possibleEnemyVictim);
+                return Optional.of(move);
+            }
 
             revertPosition(initialPosition, possibleEnemyVictim);
         }
@@ -97,7 +101,7 @@ public class Piece implements SearchHandler {
         // Resp. chain
         if (this.next == null) {
             return Optional.empty();
-        } else return this.next.findMate(color);
+        } else return this.next.findStaleMate(color);
     }
 
     public Position getPosition() {
