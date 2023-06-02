@@ -35,6 +35,7 @@ public class Piece implements SearchHandler {
         Position initialPosition = getPosition();
         for (Move move : getPossibleMoves()) {
             Optional<Piece> possibleEnemyVictim = setPosition(move.finalPosition());
+            List<Move> enemyMovesThatPreventMate = new ArrayList<Move>(10);
 
             List<Piece> enemies = getEnemies();
             for (Piece enemy : enemies) {
@@ -42,16 +43,17 @@ public class Piece implements SearchHandler {
                 Position enemyInitialPosition = enemy.getPosition();
                 for (Move enemyMove : enemyMoves) {
                     Optional<Piece> possibleAlliedVictim = enemy.setPosition(enemyMove.finalPosition());
-
-                    if (isKingInCheck(getOppositeColor())) {
-                        enemy.revertPosition(enemyInitialPosition, possibleAlliedVictim);
-                        revertPosition(initialPosition, possibleEnemyVictim);
-                        return Optional.of(move);
+                    Color enemyColor = getOppositeColor();
+                    Piece enemyKing = getKing(enemyColor);
+                    boolean enemyKingCantMove = enemyKing.getMoveStrategy().discoverPossibleMoves(enemyKing).isEmpty();
+                    boolean enemyKingInCheckAndCantMove = isKingInCheck(enemyColor) && enemyKingCantMove;
+                    if (!enemyKingInCheckAndCantMove) {
+                        enemyMovesThatPreventMate.add(enemyMove);
                     }
                     enemy.revertPosition(enemyInitialPosition, possibleAlliedVictim);
                 }
             }
-            if (isKingInCheck(getOppositeColor(color))) {
+            if (enemyMovesThatPreventMate.isEmpty()) {
                 revertPosition(initialPosition, possibleEnemyVictim);
                 return Optional.of(move);
             }
@@ -104,11 +106,13 @@ public class Piece implements SearchHandler {
         // TODO - handle en passant
 
         // Capture
+        boolean capturedAnEnemy = false;
         Optional<Piece> possiblePiece = checkWhoIsAt(position);
         if (possiblePiece.isPresent()) {
             Piece attackedPiece = possiblePiece.get();
             if (attackedPiece.getColor() != color) {
                 attackedPiece.isCaptured = true;
+                capturedAnEnemy = true;
             }
         }
 
@@ -124,7 +128,7 @@ public class Piece implements SearchHandler {
             }
         }
 
-        if (possiblePiece.isPresent()) {
+        if (possiblePiece.isPresent() && capturedAnEnemy) {
             return Optional.of(possiblePiece.get());
         } else return Optional.empty();
     }
@@ -212,7 +216,10 @@ public class Piece implements SearchHandler {
     public Optional<Piece> checkWhoIsAt(Position position) {
         Piece currentPiece = root;
         while (currentPiece != null) {
-            if (currentPiece.getPosition().equals(position) && !currentPiece.isCaptured) {
+            boolean isAtPosition = currentPiece.getPosition().equals(position);
+            boolean isntCaptured = !currentPiece.isCaptured;
+            boolean isntSelf = currentPiece != this;
+            if ( isAtPosition && isntCaptured && isntSelf ) {
                 return Optional.of(currentPiece);
             }
             currentPiece = currentPiece.next;

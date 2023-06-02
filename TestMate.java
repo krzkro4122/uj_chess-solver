@@ -38,7 +38,6 @@ public class TestMate {
     }
 
     public static boolean promotion() {
-        // https://lichess.org/
         ChessSolver chessSolver = new ChessSolver();
 
         chessSolver.addChessPiece(new Position(File.d, Rank.SECOND), Color.BLACK, ChessPiece.PAWN);
@@ -53,5 +52,20 @@ public class TestMate {
         Optional<Move> mateMove = chessSolver.findMateInOneMove(Color.BLACK);
         System.out.println(mateMove);
         return mateMove.isPresent();
+    }
+
+    public static boolean kingDefense() {
+        // https://lichess.org/3o7nl3OO
+        ChessSolver chessSolver = new ChessSolver();
+
+        chessSolver.addChessPiece(new Position(File.b, Rank.EIGHTH), Color.BLACK, ChessPiece.KING);
+        chessSolver.addChessPiece(new Position(File.h, Rank.SEVENTH), Color.BLACK, ChessPiece.PAWN);
+
+        chessSolver.addChessPiece(new Position(File.a, Rank.SIXTH), Color.WHITE, ChessPiece.QUEEN);
+        chessSolver.addChessPiece(new Position(File.h, Rank.FIRST), Color.WHITE, ChessPiece.KING);
+
+        Optional<Move> mateMove = chessSolver.findMateInOneMove(Color.WHITE);
+        System.out.println(mateMove);
+        return mateMove.isEmpty();
     }
 }
