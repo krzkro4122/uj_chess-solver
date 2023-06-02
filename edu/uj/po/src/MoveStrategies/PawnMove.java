@@ -48,16 +48,17 @@ public class PawnMove implements MoveStrategy {
         Direction direction = piece.getColor() == Color.WHITE ? Direction.NORTH_WEST : Direction.SOUTH_WEST;
         Optional<Position> leftAttackPossiblePosition = createPosition(1, direction);
 
-            if (leftAttackPossiblePosition.isEmpty()) { return moves; }
+        if (leftAttackPossiblePosition.isEmpty()) { return moves; }
 
-            Position leftAttackPosition = leftAttackPossiblePosition.get();
-            Optional<Piece> potentialPiece = piece.checkWhoIsAt(leftAttackPosition);
-            if (potentialPiece.isPresent()) {
-                Piece detectedPiece = potentialPiece.get();
-                if (detectedPiece.getColor() != piece.getColor()) {
-                    moves.add(createMove(leftAttackPosition));
-                }
+        Position leftAttackPosition = leftAttackPossiblePosition.get();
+        Optional<Piece> potentialPiece = piece.checkWhoIsAt(leftAttackPosition);
+        if (potentialPiece.isPresent()) {
+            Piece detectedPiece = potentialPiece.get();
+            if (detectedPiece.getColor() != piece.getColor()) {
+                moves.add(createMove(leftAttackPosition));
             }
+        }
+
         return moves;
     }
 
@@ -66,16 +67,60 @@ public class PawnMove implements MoveStrategy {
         Direction direction = piece.getColor() == Color.WHITE ? Direction.NORTH_EAST : Direction.SOUTH_EAST;
         Optional<Position> rightAttackPossiblePosition = createPosition(1, direction);
 
-            if (rightAttackPossiblePosition.isEmpty()) { return moves; }
+        if (rightAttackPossiblePosition.isEmpty()) { return moves; }
 
-            Position rightAttackPosition = rightAttackPossiblePosition.get();
-            Optional<Piece> potentialPiece = piece.checkWhoIsAt(rightAttackPosition);
-            if (potentialPiece.isPresent()) {
-                Piece detectedPiece = potentialPiece.get();
-                if (detectedPiece.getColor() != piece.getColor()) {
-                    moves.add(createMove(rightAttackPosition));
-                }
+        Position rightAttackPosition = rightAttackPossiblePosition.get();
+        Optional<Piece> potentialPiece = piece.checkWhoIsAt(rightAttackPosition);
+        if (potentialPiece.isPresent()) {
+            Piece detectedPiece = potentialPiece.get();
+            if (detectedPiece.getColor() != piece.getColor()) {
+                moves.add(createMove(rightAttackPosition));
             }
+        }
+        return moves;
+    }
+
+    private List<Move> leftEnPassant() {
+        List<Move> moves = new ArrayList<Move>();
+        Direction direction = piece.getColor() == Color.WHITE ? Direction.NORTH_WEST : Direction.SOUTH_WEST;
+        Direction enPassantDirection = piece.getColor() == Color.WHITE ? Direction.WEST : Direction.WEST;
+        Optional<Position> leftAttackPossiblePosition = createPosition(1, direction);
+
+        if (leftAttackPossiblePosition.isEmpty()) { return moves; }
+
+        Position leftAttackPosition = leftAttackPossiblePosition.get();
+        Optional<Position> leftEnPassantPossiblePosition = createPosition(1, enPassantDirection);
+        Optional<Piece> potentiallyEnPassable = piece.checkWhoIsAt(leftEnPassantPossiblePosition.get());
+        if (potentiallyEnPassable.isPresent()) {
+            Piece detectedPiece = potentiallyEnPassable.get();
+            boolean isAnEnemy = detectedPiece.getColor() != piece.getColor();
+            boolean isEnPassable = detectedPiece.enPassable;
+            if (isAnEnemy && isEnPassable) {
+                moves.add(createMove(leftAttackPosition));
+            }
+        }
+
+        return moves;
+    }
+
+    private List<Move> rightEnPassant() {
+        List<Move> moves = new ArrayList<Move>();
+        Direction direction = piece.getColor() == Color.WHITE ? Direction.NORTH_EAST : Direction.SOUTH_EAST;
+        Direction enPassantDirection = piece.getColor() == Color.WHITE ? Direction.EAST : Direction.EAST;
+        Optional<Position> rightAttackPossiblePosition = createPosition(1, direction);
+
+        if (rightAttackPossiblePosition.isEmpty()) { return moves; }
+
+        Position rightAttackPosition = rightAttackPossiblePosition.get();
+        Optional<Position> rightEnPassantPossiblePosition = createPosition(1, enPassantDirection);
+        Optional<Piece> potentiallyEnPassable = piece.checkWhoIsAt(rightEnPassantPossiblePosition.get());
+        if (potentiallyEnPassable.isPresent()) {
+            Piece detectedPiece = potentiallyEnPassable.get();
+            if (detectedPiece.getColor() != piece.getColor() && detectedPiece.enPassable) {
+                moves.add(createMove(rightAttackPosition));
+            }
+        }
+
         return moves;
     }
 
@@ -91,6 +136,10 @@ public class PawnMove implements MoveStrategy {
         // Attacks
         moves.addAll(leftAttack());
         moves.addAll(rightAttack());
+
+        // Attacks
+        moves.addAll(leftEnPassant());
+        moves.addAll(rightEnPassant());
 
         // Simple moves
         Optional<Position> possiblePositionInFront = createPosition(1, getMoveDirection());

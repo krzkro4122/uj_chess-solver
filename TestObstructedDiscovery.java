@@ -101,7 +101,7 @@ public class TestObstructedDiscovery {
         return false;
     }
 
-    public static boolean testPawnDiscoverySimple() {
+    public static boolean testPawnDiscoverySimple1() {
         ChessSolver chessSolver = new ChessSolver();
         chessSolver.addChessPiece(new Position(File.e, Rank.SECOND), Color.WHITE, ChessPiece.PAWN);
         // Obstacles
@@ -111,6 +111,21 @@ public class TestObstructedDiscovery {
         List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean testPawnDiscoverySimple2() {
+        ChessSolver chessSolver = new ChessSolver();
+        chessSolver.addChessPiece(new Position(File.e, Rank.SECOND), Color.WHITE, ChessPiece.PAWN);
+        // Obstacles
+        chessSolver.addChessPiece(new Position(File.e, Rank.THIRD), Color.WHITE, ChessPiece.PAWN);
+        // Control group
+        chessSolver.addChessPiece(new Position(File.h, Rank.FIFTH), Color.WHITE, ChessPiece.KING);
+        List<Move> moveList = chessSolver.testMoveGeneration();
+        System.out.println(moveList);
+        if (moveList.size() == 0) {
             return true;
         }
         return false;

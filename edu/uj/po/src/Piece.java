@@ -22,6 +22,7 @@ public class Piece implements SearchHandler {
     MoveStrategy moveStrategy;
     boolean isCaptured = false;
     boolean isPromoted = false;
+    public boolean enPassable = false;
     private List<Move> possibleMoves;
 
     @Override
@@ -29,7 +30,10 @@ public class Piece implements SearchHandler {
 
         // Resp. chain filter
         if (getColor() != color) {
-            return this.next.findMate(color);
+            if (next == null) {
+                return Optional.empty();
+            }
+            return next.findMate(color);
         }
 
         Position initialPosition = getPosition();
@@ -101,15 +105,37 @@ public class Piece implements SearchHandler {
     }
 
     public Optional<Piece> setPosition(Position position) {
+        Rank rankInitial = this.position.rank();
+        int rankInitialInt = this.position.rank().ordinal();
         this.position = position;
+        int rankFinal = this.position.rank().ordinal();
 
-        // TODO - handle en passant
+        // En passant
+        if (type == ChessPiece.PAWN) {
+            int rankDifference = rankFinal - rankInitialInt;
+            if (rankDifference == 2) {
+                enPassable = true;
+                return Optional.empty();
+            }
+        }
 
         // Capture
         boolean capturedAnEnemy = false;
         Optional<Piece> possiblePiece = checkWhoIsAt(position);
+
+        Position enPassantTribute = new Position(position.file(), rankInitial);
+        Optional<Piece> possibleEnPassantTribute = checkWhoIsAt(enPassantTribute);
+        boolean enPassantable = possiblePiece.isEmpty() && possibleEnPassantTribute.isPresent();
+
         if (possiblePiece.isPresent()) {
             Piece attackedPiece = possiblePiece.get();
+            if (attackedPiece.getColor() != color) {
+                attackedPiece.isCaptured = true;
+                capturedAnEnemy = true;
+            }
+        }
+        else if (enPassantable) {
+            Piece attackedPiece = possibleEnPassantTribute.get();
             if (attackedPiece.getColor() != color) {
                 attackedPiece.isCaptured = true;
                 capturedAnEnemy = true;
@@ -130,6 +156,8 @@ public class Piece implements SearchHandler {
 
         if (possiblePiece.isPresent() && capturedAnEnemy) {
             return Optional.of(possiblePiece.get());
+        } else if (possibleEnPassantTribute.isPresent() && capturedAnEnemy) {
+            return Optional.of(possibleEnPassantTribute.get());
         } else return Optional.empty();
     }
 
@@ -142,6 +170,9 @@ public class Piece implements SearchHandler {
         if (isPromoted) {
             type = ChessPiece.PAWN;
             isPromoted = false;
+        }
+        if (type == ChessPiece.PAWN) {
+            enPassable = false;
         }
     }
 

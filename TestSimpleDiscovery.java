@@ -68,13 +68,25 @@ public class TestSimpleDiscovery {
         return false;
     }
 
-    public static boolean testPawnDiscoverySimple() {
+    public static boolean testPawnDiscoverySimple1() {
         ChessSolver chessSolver = new ChessSolver();
         chessSolver.addChessPiece(new Position(File.e, Rank.SECOND), Color.WHITE, ChessPiece.PAWN);
         chessSolver.addChessPiece(new Position(File.h, Rank.FIRST), Color.WHITE, ChessPiece.KING);
         List<Move> moveList = chessSolver.testMoveGeneration();
         System.out.println(moveList);
         if (moveList.size() == 2) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean testPawnDiscoverySimple2() {
+        ChessSolver chessSolver = new ChessSolver();
+        chessSolver.addChessPiece(new Position(File.e, Rank.THIRD), Color.WHITE, ChessPiece.PAWN);
+        chessSolver.addChessPiece(new Position(File.h, Rank.FIRST), Color.WHITE, ChessPiece.KING);
+        List<Move> moveList = chessSolver.testMoveGeneration();
+        System.out.println(moveList);
+        if (moveList.size() == 1) {
             return true;
         }
         return false;
