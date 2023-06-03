@@ -30,13 +30,13 @@ public class TestRunner {
         // assertify(TestsFromPdf.case2(), "case2");
         // assertify(TestsFromPdf.case3(), "case3");
         // assertify(TestsFromPdf.case4(), "case4");
-        assertify(TestsFromPdf.case5(), "case5");
+        // assertify(TestsFromPdf.case5(), "case5");
         // assertify(TestsFromPdf.case6(), "case6");
         // assertify(TestsFromPdf.case7(), "case7");
         // assertify(TestsFromPdf.case8(), "case8");
         // assertify(TestsFromPdf.case9(), "case9");
         // assertify(TestsFromPdf.case10(), "case10");
-        assertify(TestsFromPdf.case11(), "case11");
+        // assertify(TestsFromPdf.case11(), "case11");
         // assertify(TestsFromPdf.case12(), "case12");
         // assertify(TestsFromPdf.case13(), "case13");
         // assertify(TestsFromPdf.case14(), "case14");
@@ -54,10 +54,19 @@ public class TestRunner {
         // assertify(TestMate.kingDefense(), "King defense");
         // System.out.println("Mate search - OK");
 
-        // System.out.println("Testing stalemate search...");
-        // assertify(TestStalemate.case1(), "Case 1");
-        // assertify(TestStalemate.case2(), "Case 2");
-        // System.out.println("Stalemate search - OK");
+        System.out.println("Testing stalemate search...");
+        assertify(TestStalemate.case1(), "Case 1");
+        assertify(TestStalemate.case2(), "Case 2");
+        assertify(TestStalemate.case3(), "Case 3");
+        assertify(TestStalemate.case4(), "Case 4");
+        assertify(TestStalemate.case5(), "Case 5");
+        assertify(TestStalemate.case6(), "Case 6");
+        assertify(TestStalemate.case7(), "Case 7");
+        assertify(TestStalemate.case8(), "Case 8");
+        assertify(TestStalemate.case9(), "Case 9");
+        assertify(TestStalemate.case10(), "Case 10");
+        assertify(TestStalemate.case11(), "Case 11");
+        System.out.println("Stalemate search - OK");
 
         System.out.println("Tests finished");
     }
