@@ -53,9 +53,9 @@ public class BishopMove implements MoveStrategy {
     @Override
     public List<Move> discoverPossibleMoves(Piece piece) {
         List<Move> moves = new ArrayList<Move>();
-        List<Direction> rookDirections = List.of(Direction.NORTH_EAST, Direction.SOUTH_EAST, Direction.SOUTH_WEST, Direction.NORTH_WEST);
+        List<Direction> directions = List.of(Direction.NORTH_EAST, Direction.SOUTH_EAST, Direction.SOUTH_WEST, Direction.NORTH_WEST);
 
-        for (Direction direction : rookDirections) {
+        for (Direction direction : directions) {
             moves.addAll(scanDirectionForMoves(direction));
         }
 

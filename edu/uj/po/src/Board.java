@@ -58,6 +58,6 @@ public class Board implements Solver {
             .filter(p -> p.getColor() == color)
             .findFirst()
             .get();
-        return coloredRepresentant.root.findStaleMate(color);
+        return coloredRepresentant.root.findStalemate(color);
     }
 }

@@ -7,5 +7,5 @@ import edu.uj.po.interfaces.Move;
 
 public interface SearchHandler {
     public Optional<Move> findMate(Color color);
-    public Optional<Move> findStaleMate(Color color);
+    public Optional<Move> findStalemate(Color color);
 }

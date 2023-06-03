@@ -73,11 +73,11 @@ public class Piece implements SearchHandler {
     }
 
     @Override
-    public Optional<Move> findStaleMate(Color color) {
+    public Optional<Move> findStalemate(Color color) {
 
         // Resp. chain filter
         if (this.color != color) {
-            return next == null ? Optional.empty() : next.findStaleMate(color);
+            return next == null ? Optional.empty() : next.findStalemate(color);
         }
 
         Position initialPosition = getPosition();
@@ -100,7 +100,7 @@ public class Piece implements SearchHandler {
         }
 
         // Resp. chain
-        return next == null ? Optional.empty() : next.findStaleMate(color);
+        return next == null ? Optional.empty() : next.findStalemate(color);
     }
 
     public Position getPosition() {
@@ -128,7 +128,7 @@ public class Piece implements SearchHandler {
 
         Position enPassantTribute = new Position(position.file(), rankInitial);
         Optional<Piece> possibleEnPassantTribute = checkWhoIsAt(enPassantTribute);
-        boolean enPassantable = possiblePiece.isEmpty() && possibleEnPassantTribute.isPresent();
+        boolean enPassantable = type == ChessPiece.PAWN && possiblePiece.isEmpty() && possibleEnPassantTribute.isPresent();
 
         if (possiblePiece.isPresent()) {
             Piece attackedPiece = possiblePiece.get();
