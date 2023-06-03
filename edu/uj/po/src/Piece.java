@@ -87,15 +87,16 @@ public class Piece implements SearchHandler {
             List<Piece> enemies = getEnemies();
             List<Move> discoveredEnemyMoves = new ArrayList<Move>();
             for (Piece enemy : enemies) {
+                possibleEnemyVictim = setPosition(move.finalPosition());
                 discoveredEnemyMoves.addAll(enemy.getPossibleMoves());
                 revertPosition(initialPosition, possibleEnemyVictim);
             }
 
-            if (discoveredEnemyMoves.isEmpty()) {
+            possibleEnemyVictim = setPosition(move.finalPosition());
+            if (discoveredEnemyMoves.isEmpty() && !isKingInCheck(getOppositeColor())) {
                 revertPosition(initialPosition, possibleEnemyVictim);
                 return Optional.of(move);
             }
-
             revertPosition(initialPosition, possibleEnemyVictim);
         }
 
