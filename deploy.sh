@@ -1,6 +1,6 @@
 #!/bin/bash
 
-COMPRESED_FILE='k.tgz'
+COMPRESED_FILE='k1.tgz'
 
 tar -zcvf $COMPRESED_FILE *
 scp -i ~/.ssh/id_rsa $COMPRESED_FILE krol_1197262@spk-ssh.if.uj.edu.pl:/home/krol_1197262
