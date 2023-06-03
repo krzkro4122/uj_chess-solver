@@ -18,8 +18,7 @@ public class ChessSolver implements Setup, Solver {
     private PieceBuilder pieceBuilder;
 
     public ChessSolver() {
-        board = new Board();
-        pieceBuilder = new PieceBuilder();
+        reset();
     }
 
 	public Optional<Move> findMateInOneMove(Color color) {

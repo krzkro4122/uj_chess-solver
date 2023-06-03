@@ -30,15 +30,21 @@ public class Piece implements SearchHandler {
 
         // Resp. chain filter
         if (getColor() != color) {
-            if (next == null) {
-                return Optional.empty();
-            } else return next.findMate(color);
+            return next == null ? Optional.empty() : next.findMate(color);
         }
+
+        Color enemyColor = getOppositeColor();
 
         Position initialPosition = getPosition();
         for (Move move : getPossibleMoves()) {
             Optional<Piece> possibleEnemyVictim = setPosition(move.finalPosition());
-            List<Move> enemyMovesThatPreventMate = new ArrayList<Move>(10);
+
+            if (!isKingInCheck(enemyColor)) {
+                revertPosition(initialPosition, possibleEnemyVictim);
+                continue;
+            }
+
+            List<Move> enemyMovesThatPreventMate = new ArrayList<Move>();
 
             List<Piece> enemies = getEnemies();
             for (Piece enemy : enemies) {
@@ -46,7 +52,6 @@ public class Piece implements SearchHandler {
                 Position enemyInitialPosition = enemy.getPosition();
                 for (Move enemyMove : enemyMoves) {
                     Optional<Piece> possibleAlliedVictim = enemy.setPosition(enemyMove.finalPosition());
-                    Color enemyColor = getOppositeColor();
                     Piece enemyKing = getKing(enemyColor);
                     boolean enemyKingCantMove = enemyKing.getMoveStrategy().discoverPossibleMoves(enemyKing).isEmpty();
                     boolean enemyKingInCheckAndCantMove = isKingInCheck(enemyColor) && enemyKingCantMove;
@@ -64,9 +69,7 @@ public class Piece implements SearchHandler {
         }
 
         // Resp. chain
-        if (this.next == null) {
-            return Optional.empty();
-        } else return this.next.findMate(color);
+        return next == null ? Optional.empty() : next.findMate(color);
     }
 
     @Override
@@ -74,9 +77,7 @@ public class Piece implements SearchHandler {
 
         // Resp. chain filter
         if (this.color != color) {
-            if (this.next == null) {
-                return Optional.empty();
-            } else return this.next.findStaleMate(color);
+            return next == null ? Optional.empty() : next.findStaleMate(color);
         }
 
         Position initialPosition = getPosition();
@@ -84,7 +85,7 @@ public class Piece implements SearchHandler {
             Optional<Piece> possibleEnemyVictim = setPosition(move.finalPosition());
 
             List<Piece> enemies = getEnemies();
-            List<Move> discoveredEnemyMoves = new ArrayList<Move>(10);
+            List<Move> discoveredEnemyMoves = new ArrayList<Move>();
             for (Piece enemy : enemies) {
                 discoveredEnemyMoves.addAll(enemy.getPossibleMoves());
                 revertPosition(initialPosition, possibleEnemyVictim);
@@ -99,9 +100,7 @@ public class Piece implements SearchHandler {
         }
 
         // Resp. chain
-        if (this.next == null) {
-            return Optional.empty();
-        } else return this.next.findStaleMate(color);
+        return next == null ? Optional.empty() : next.findStaleMate(color);
     }
 
     public Position getPosition() {
