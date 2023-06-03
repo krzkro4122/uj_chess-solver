@@ -1,11 +1,11 @@
 package edu.uj.po.src;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
 
-import edu.uj.po.interfaces.Color;
 import edu.uj.po.interfaces.Move;
+import edu.uj.po.interfaces.Color;
 import edu.uj.po.interfaces.Solver;
 
 public class Board implements Solver {
@@ -13,8 +13,8 @@ public class Board implements Solver {
     private BoardMemento memento;
 
     public Board() {
-        this.pieces = new ArrayList<Piece>();
-        this.memento = new BoardMemento(pieces);
+        pieces = new ArrayList<Piece>();
+        memento = new BoardMemento(pieces);
     }
 
     public void loadSnapshot(BoardMemento memento) {
